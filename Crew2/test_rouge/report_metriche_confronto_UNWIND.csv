@@ -1,0 +1,8 @@
+﻿Caso,ReAct_Coseno,ReAct_ROUGE_L,LLM_Puro_Coseno,LLM_Puro_ROUGE_L
+delitto_di_cogne,0.3203,0.1339,0.3968,0.2149
+delitto_di_novi_ligure,0.3247,0.1561,0.401,0.1908
+omicidio_di_alberto_brasili,0.3783,0.1761,0.3793,0.1746
+omicidio_di_giulia_cecchettin,0.3056,0.156,0.3869,0.1871
+omicidio_di_marco_vannini,0.3299,0.1304,0.4236,0.2289
+omicidio_di_marta_russo,0.3845,0.1895,0.3845,0.1997
+MEDIA GLOBALE,0.3405,0.157,0.3954,0.1993

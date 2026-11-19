@@ -1,0 +1,10 @@
+CASO                           | REACT COS | REACT ROUGEL | LLM COS   | LLM ROUGEL
+--------------------------------------------------------------------------------
+delitto_di_cogne               | 0.9154    | 0.6818      | 1.0000    | 1.0000
+delitto_di_novi_ligure         | 0.9123    | 0.6776      | 1.0000    | 1.0000
+omicidio_di_alberto_brasili    | 0.9756    | 0.8265      | 0.9753    | 0.8265
+omicidio_di_giulia_cecchettin  | 0.9496    | 0.7665      | 1.0000    | 1.0000
+omicidio_di_marco_vannini      | 0.8617    | 0.5740      | 0.9497    | 0.8581
+omicidio_di_marta_russo        | 1.0000    | 1.0000      | 1.0000    | 1.0000
+--------------------------------------------------------------------------------
+MEDIA GLOBALE                  | 0.9358    | 0.7544      | 0.9875    | 0.9474

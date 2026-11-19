@@ -1,0 +1,178 @@
+import os
+import re
+import pandas as pd
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+from rouge_score import rouge_scorer
+
+# ==========================================
+# 1. SETUP E CONFIGURAZIONE PERCORSI
+# ==========================================
+# Cartella in cui risiede questo script Python
+DIR_SCRIPT = os.path.dirname(os.path.abspath(__file__))
+
+# Cartella base del progetto (risale di due livelli: adatta i "../.." se necessario a seconda di dove metti lo script)
+CARTELLA_BASE = os.path.abspath(os.path.join(DIR_SCRIPT, "../.."))
+
+# Percorsi dei log originali delle query
+FILE_REACT = os.path.join(CARTELLA_BASE, "Crew2", "test_crew2", "grafici_output_final", "query_agente_react.txt")
+FILE_LLM = os.path.join(CARTELLA_BASE, "Crew2", "test_crew2", "grafici_output_final", "query_llm_puro.txt")
+
+# Il file CSV di output viene salvato NELLA STESSA CARTELLA dello script
+FILE_OUTPUT_CSV = os.path.join(DIR_SCRIPT, "report_metriche_confronto_UNWIND.csv")
+
+CASI_DATASET = [
+    "delitto_di_cogne.json",
+    "delitto_di_novi_ligure.json",
+    "omicidio_di_alberto_brasili.json",
+    "omicidio_di_giulia_cecchettin.json",
+    "omicidio_di_marco_vannini.json",
+    "omicidio_di_marta_russo.json"
+]
+
+# ==========================================
+# 2. IL TEMPLATE UNWIND (GOLDEN REFERENCE)
+# ==========================================
+# Questa è la query di riferimento assoluta con cui confrontiamo i modelli
+QUERY_UNWIND_TEMPLATE = """
+WITH $dati AS dati
+
+// FASE 1: CREAZIONE NODI
+UNWIND coalesce(dati.entities, []) AS e
+FOREACH (_ IN CASE WHEN e.label = 'Case' THEN [1] ELSE [] END | MERGE (n:Case {id: e.id}) SET n.name = e.name)
+FOREACH (_ IN CASE WHEN e.label = 'Person' THEN [1] ELSE [] END | MERGE (n:Person {id: e.id}) SET n.name = e.name, n.gender = e.gender, n.role = e.role, n.age = e.age, n.profession = e.profession, n.date_of_birth = e.date_of_birth, n.date_of_death = e.date_of_death, n.is_deceased = e.is_deceased)
+FOREACH (_ IN CASE WHEN e.label = 'Location' THEN [1] ELSE [] END | MERGE (n:Location {id: e.id}) SET n.name = e.name)
+FOREACH (_ IN CASE WHEN e.label = 'Statement' THEN [1] ELSE [] END | MERGE (n:Statement {id: e.id}) SET n.name = e.name)
+FOREACH (_ IN CASE WHEN e.label = 'Motive' THEN [1] ELSE [] END | MERGE (n:Motive {id: e.id}) SET n.name = e.name)
+FOREACH (_ IN CASE WHEN e.label = 'Charge' THEN [1] ELSE [] END | MERGE (n:Charge {id: e.id}) SET n.name = e.name)
+FOREACH (_ IN CASE WHEN e.label = 'Evidence' THEN [1] ELSE [] END | MERGE (n:Evidence {id: e.id}) SET n.name = e.name)
+FOREACH (_ IN CASE WHEN e.label = 'Weapon' THEN [1] ELSE [] END | MERGE (n:Weapon {id: e.id}) SET n.name = e.name)
+
+WITH dati
+
+// FASE 2: CREAZIONE RELAZIONI
+UNWIND coalesce(dati.relationships, []) AS rel
+FOREACH (_ IN CASE WHEN rel.type = 'COMMITTED' THEN [1] ELSE [] END | MERGE (src:Person {id: rel.source_id}) MERGE (tgt:Case {id: rel.target_id}) MERGE (src)-[:COMMITTED]->(tgt))
+FOREACH (_ IN CASE WHEN rel.type = 'IS_SUSPECTED_IN' THEN [1] ELSE [] END | MERGE (src:Person {id: rel.source_id}) MERGE (tgt:Case {id: rel.target_id}) MERGE (src)-[:IS_SUSPECTED_IN]->(tgt))
+FOREACH (_ IN CASE WHEN rel.type = 'IS_VICTIM_OF' THEN [1] ELSE [] END | MERGE (src:Person {id: rel.source_id}) MERGE (tgt:Case {id: rel.target_id}) MERGE (src)-[:IS_VICTIM_OF]->(tgt))
+FOREACH (_ IN CASE WHEN rel.type = 'INVESTIGATES' THEN [1] ELSE [] END | MERGE (src:Person {id: rel.source_id}) MERGE (tgt:Case {id: rel.target_id}) MERGE (src)-[:INVESTIGATES]->(tgt))
+FOREACH (_ IN CASE WHEN rel.type = 'DEFENDS' THEN [1] ELSE [] END | MERGE (src:Person {id: rel.source_id}) MERGE (tgt:Person {id: rel.target_id}) MERGE (src)-[:DEFENDS]->(tgt))
+FOREACH (_ IN CASE WHEN rel.type = 'INVOLVED_IN' THEN [1] ELSE [] END | MERGE (src:Person {id: rel.source_id}) MERGE (tgt:Case {id: rel.target_id}) MERGE (src)-[:INVOLVED_IN]->(tgt))
+FOREACH (_ IN CASE WHEN rel.type = 'OCCURRED_AT' THEN [1] ELSE [] END | MERGE (src:Case {id: rel.source_id}) MERGE (tgt:Location {id: rel.target_id}) MERGE (src)-[:OCCURRED_AT]->(tgt))
+FOREACH (_ IN CASE WHEN rel.type = 'WITHIN' THEN [1] ELSE [] END | MERGE (src:Location {id: rel.source_id}) MERGE (tgt:Location {id: rel.target_id}) MERGE (src)-[:WITHIN]->(tgt))
+FOREACH (_ IN CASE WHEN rel.type = 'USED_IN' THEN [1] ELSE [] END | MERGE (src:Weapon {id: rel.source_id}) MERGE (tgt:Case {id: rel.target_id}) MERGE (src)-[:USED_IN]->(tgt))
+FOREACH (_ IN CASE WHEN rel.type = 'FOUND_AT' THEN [1] ELSE [] END | MERGE (src {id: rel.source_id}) MERGE (tgt:Location {id: rel.target_id}) MERGE (src)-[:FOUND_AT]->(tgt))
+FOREACH (_ IN CASE WHEN rel.type = 'HAS_MOTIVE' THEN [1] ELSE [] END | MERGE (src:Case {id: rel.source_id}) MERGE (tgt:Motive {id: rel.target_id}) MERGE (src)-[:HAS_MOTIVE]->(tgt))
+FOREACH (_ IN CASE WHEN rel.type = 'LEFT_EVIDENCE' THEN [1] ELSE [] END | MERGE (src:Person {id: rel.source_id}) MERGE (tgt:Evidence {id: rel.target_id}) MERGE (src)-[:LEFT_EVIDENCE]->(tgt))
+FOREACH (_ IN CASE WHEN rel.type = 'LOCATED_IN' THEN [1] ELSE [] END | MERGE (src:Person {id: rel.source_id}) MERGE (tgt:Location {id: rel.target_id}) MERGE (src)-[:LOCATED_IN]->(tgt))
+FOREACH (_ IN CASE WHEN rel.type = 'MADE_STATEMENT' THEN [1] ELSE [] END | MERGE (src:Person {id: rel.source_id}) MERGE (tgt:Statement {id: rel.target_id}) MERGE (src)-[:MADE_STATEMENT]->(tgt))
+FOREACH (_ IN CASE WHEN rel.type = 'RELATES_TO' THEN [1] ELSE [] END | MERGE (src:Statement {id: rel.source_id}) MERGE (tgt {id: rel.target_id}) MERGE (src)-[:RELATES_TO]->(tgt))
+FOREACH (_ IN CASE WHEN rel.type = 'CHARGED_WITH' THEN [1] ELSE [] END | MERGE (src:Person {id: rel.source_id}) MERGE (tgt:Charge {id: rel.target_id}) MERGE (src)-[:CHARGED_WITH]->(tgt))
+FOREACH (_ IN CASE WHEN rel.type = 'INCLUDES_CHARGE' THEN [1] ELSE [] END | MERGE (src:Case {id: rel.source_id}) MERGE (tgt:Charge {id: rel.target_id}) MERGE (src)-[:INCLUDES_CHARGE]->(tgt))
+FOREACH (_ IN CASE WHEN rel.type = 'OWNS_WEAPON' THEN [1] ELSE [] END | MERGE (src:Person {id: rel.source_id}) MERGE (tgt:Weapon {id: rel.target_id}) MERGE (src)-[:OWNS_WEAPON]->(tgt))
+RETURN count(rel) AS relazioni_processate
+"""
+
+def estrai_query_da_log(percorso_file):
+    query_map = {}
+    if not os.path.exists(percorso_file):
+        print(f"[ERRORE CRITICO] File di log non trovato: {percorso_file}")
+        return query_map
+        
+    with open(percorso_file, 'r', encoding='utf-8') as f:
+        contenuto = f.read()
+        
+    blocchi = re.split(r'--- CASO AGENTE ---|--- NUOVO CASO LLM PURO \(ZERO-SHOT\) ---', contenuto)
+    
+    for blocco in blocchi:
+        blocco = blocco.strip()
+        if not blocco: 
+            continue
+            
+        blocco_lower = blocco.lower()
+        for nome_file in CASI_DATASET:
+            chiave_base = nome_file.replace(".json", "")
+            chiave_alternativa = chiave_base.replace("_di_", "_")
+            
+            if chiave_base in blocco_lower or chiave_alternativa in blocco_lower:
+                query_map[nome_file] = blocco
+                break
+                
+    return query_map
+
+def elabora_testo_query(testo_query):
+    if not testo_query: return ""
+    # Pulizia di base (rimuove commenti e blocchi markdown)
+    q = re.sub(r'//.*', '', testo_query).replace("```cypher", "").replace("```", "")
+    # Aggiunge a capo per allineare le istruzioni principali e facilitare il TF-IDF
+    q = re.sub(r'\s*(MERGE|MATCH|SET|CREATE|UNWIND|FOREACH|WITH)\b', r'\n\1', q)
+    # Rimuove doppi spazi e rende minuscolo
+    q = re.sub(r'[ \t]+', ' ', q).lower().strip()
+    return q
+
+def calcola_metriche(query_generata, query_golden):
+    if not query_generata or not query_golden:
+        return {"cosine": 0.0, "rougeL": 0.0}
+    
+    norm_gen = elabora_testo_query(query_generata)
+    norm_gold = elabora_testo_query(query_golden)
+    
+    vectorizer = TfidfVectorizer()
+    try:
+        tfidf_matrix = vectorizer.fit_transform([norm_gen, norm_gold])
+        cos_sim = cosine_similarity(tfidf_matrix[0:1], tfidf_matrix[1:2])[0][0]
+    except ValueError:
+        cos_sim = 0.0
+
+    scorer = rouge_scorer.RougeScorer(['rougeL'], use_stemmer=True)
+    scores = scorer.score(norm_gold, norm_gen)
+    
+    return {"cosine": cos_sim, "rougeL": scores['rougeL'].fmeasure}
+
+if __name__ == "__main__":
+    print("[INFO] Estrazione query dai log...")
+    map_react = estrai_query_da_log(FILE_REACT)
+    map_llm = estrai_query_da_log(FILE_LLM)
+    risultati = []
+
+    print("[INFO] Calcolo metriche di similarità (Riferimento: UNWIND)...")
+    for nome_file in CASI_DATASET:
+        nome_caso = nome_file.replace(".json", "")
+        
+        query_react = map_react.get(nome_file, "")
+        query_llm = map_llm.get(nome_file, "")
+        
+        # Effettuiamo il calcolo confrontando contro il template UNWIND
+        score_react = calcola_metriche(query_react, QUERY_UNWIND_TEMPLATE)
+        score_llm = calcola_metriche(query_llm, QUERY_UNWIND_TEMPLATE)
+        
+        risultati.append({
+            "Caso": nome_caso,
+            "ReAct_Coseno": round(score_react["cosine"], 4),
+            "ReAct_ROUGE_L": round(score_react["rougeL"], 4),
+            "LLM_Puro_Coseno": round(score_llm["cosine"], 4),
+            "LLM_Puro_ROUGE_L": round(score_llm["rougeL"], 4)
+        })
+
+    # Creazione del DataFrame Pandas
+    df = pd.DataFrame(risultati)
+
+    # Aggiunta riga di MEDIA GLOBALE
+    if not df.empty:
+        media_row = {
+            "Caso": "MEDIA GLOBALE",
+            "ReAct_Coseno": round(df["ReAct_Coseno"].mean(), 4),
+            "ReAct_ROUGE_L": round(df["ReAct_ROUGE_L"].mean(), 4),
+            "LLM_Puro_Coseno": round(df["LLM_Puro_Coseno"].mean(), 4),
+            "LLM_Puro_ROUGE_L": round(df["LLM_Puro_ROUGE_L"].mean(), 4)
+        }
+        df = pd.concat([df, pd.DataFrame([media_row])], ignore_index=True)
+
+    # ==========================================
+    # SALVATAGGIO CSV NELLA STESSA CARTELLA
+    # ==========================================
+    df.to_csv(FILE_OUTPUT_CSV, index=False, encoding="utf-8-sig")
+    
+    print("\n--- RISULTATI CONFRONTO CON UNWIND ---")
+    print(df)
+    print(f"\n[SUCCESS] CSV salvato in: {FILE_OUTPUT_CSV}")

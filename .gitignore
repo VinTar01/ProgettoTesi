@@ -1,0 +1,40 @@
+# --- Variabili d'ambiente e segreti ---
+.env
+.env.*
+!.env.example
+
+# --- Ambienti virtuali e cache Python ---
+venv/
+.venv/
+env/
+__pycache__/
+*.py[cod]
+*$py.class
+
+# --- File temporanei e di analisi locali nella root ---
+ztest.py
+zandamentoCostiETokeno.py
+
+# --- Dataset grezzi e output JSON intermedi ---
+data/raw/*.json
+raw/*.json
+Extraction_versions/Pure_LLM/output_json/*.json
+Extraction_versions/React_Only/output_json/*.json
+Extraction_versions/ReAct_Only/output_json/*.json
+
+# --- Esclusioni specifiche per Crew ---
+# Crew 2: esclude gli archivi JSON dei casi già inseriti nel DB
+Crew2/casi_inseriti_db_*/
+
+# Crew 3: esclude i test sperimentali su YAGO
+Crew3/test_yago_crew3/
+Crew3/test_yago_crew3*
+
+# Crew 4: esclude i file CSV nella cartella test_crew4
+Crew4/test_crew4/*.csv
+
+# --- IDE e file di sistema ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

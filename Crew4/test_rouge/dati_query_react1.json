@@ -1,0 +1,123 @@
+[
+  {
+    "id": "EASY_01",
+    "livello": "Facile",
+    "domanda_naturale": "Chi è l'imputato o sospettato principale nel caso del Delitto di Garlasco (omicidio di Chiara Poggi)?",
+    "cypher_ottimale": "MATCH (p:Person)-[:COMMITTED|IS_SUSPECTED_IN]-(c:Case) WHERE toLower(c.name) CONTAINS 'garlasco' OR toLower(c.name) CONTAINS 'poggi' RETURN p.name AS risultato",
+    "cypher_generato": "MATCH (c:Case) WHERE toLower(c.name) CONTAINS 'garlasco' MATCH (p:Person)-[r]-(c) RETURN p.name, p.role, type(r) AS relationship, c.name AS case_name",
+    "risultato_atteso": ["Alberto Stasi", "Andrea Sempio"],
+    "numero_risultati_attesi": 2,
+    "numero_risultati_ottenuti_query": 2,
+    "numero_risultati_in_risposta_llm": 2
+  },
+  {
+    "id": "EASY_02",
+    "livello": "Facile",
+    "domanda_naturale": "Chi è la persona che difende il colpevole della morte di Diana Pifferi?",
+    "cypher_ottimale": "MATCH (avvocato:Person)-[:DEFENDS]->(p:Person)-[:COMMITTED]->(c:Case) WHERE toLower(c.name) CONTAINS 'pifferi' RETURN avvocato.name AS nome",
+    "cypher_generato": "MATCH (p:Person)-[:DEFENDS]-(target) WHERE toLower(target.name) CONTAINS 'alessia pifferi' OR toLower(p.role) CONTAINS 'difensore' OR toLower(p.profession) CONTAINS 'avvocato' RETURN p.name, p.role, p.profession, target.name",
+    "risultato_atteso": ["Alessia Pontenani"],
+    "numero_risultati_attesi": 1,
+    "numero_risultati_ottenuti_query": 1,
+    "numero_risultati_in_risposta_llm": 1
+  },
+  {
+    "id": "EASY_03",
+    "livello": "Facile",
+    "domanda_naturale": "In quale città o luogo specifico è avvenuto l'omicidio di Luigi Marangoni?",
+    "cypher_ottimale": "MATCH (c:Case)-[:OCCURRED_AT]-(l:Location) WHERE toLower(c.name) CONTAINS 'marangoni' RETURN l.name AS comune",
+    "cypher_generato": "MATCH (p:Person)-[:IS_VICTIM_OF]-(c:Case) WHERE toLower(p.name) CONTAINS 'luigi marangoni' MATCH (c)-[:OCCURRED_AT]-(l:Location) RETURN p.name, c.name, l.name",
+    "risultato_atteso": ["Milano"],
+    "numero_risultati_attesi": 1,
+    "numero_risultati_ottenuti_query": 1,
+    "numero_risultati_in_risposta_llm": 1
+  },
+  {
+    "id": "EASY_04",
+    "livello": "Facile",
+    "domanda_naturale": "In quale città o luogo specifico è avvenuto l'omicidio di Stefano Cecchetti?",
+    "cypher_ottimale": "MATCH (c:Case) WHERE toLower(c.name) CONTAINS 'cecchetti' OPTIONAL MATCH (c)-[:OCCURRED_AT]-(l:Location) RETURN coalesce(c.location_label) AS luogo",
+    "cypher_generato": "MATCH (p:Person) WHERE toLower(p.name) CONTAINS 'stefano cecchetti' OPTIONAL MATCH (p)-[:IS_VICTIM_OF|INVOLVED_IN|COMMITTED]-(c:Case) OPTIONAL MATCH (c)-[:OCCURRED_AT]-(l:Location) RETURN p.name AS person, c.name AS case_name, c.location_label AS case_location_label, l.name AS location_name",
+    "risultato_atteso": ["Roma"],
+    "numero_risultati_attesi": 1,
+    "numero_risultati_ottenuti_query": 1,
+    "numero_risultati_in_risposta_llm": 1
+  },
+  {
+    "id": "MEDIUM_01",
+    "livello": "Medio",
+    "domanda_naturale": "Quali casi di omicidio nel database vedono l'impiego di una pistola o di un coltello?",
+    "cypher_ottimale": "MATCH (w:Weapon)-[:USED_IN]-(c:Case) WHERE toLower(w.name) CONTAINS 'beretta' OR toLower(w.name) CONTAINS 'coltello' OR toLower(w.name) CONTAINS 'pistola' RETURN c.name AS caso, w.name AS arma",
+    "cypher_generato": "MATCH (c:Case)-[:USED_IN]-(w:Weapon) WHERE toLower(w.name) CONTAINS 'pistola' OR toLower(w.name) CONTAINS 'coltello' RETURN DISTINCT c.name AS case_name, w.name AS weapon_name",
+    "risultato_atteso": ["Omicidio di Ciro Principessa", "Omicidio di Monica Calò", "Omicidio di Gabriele Sandri"],
+    "numero_risultati_attesi": 9,
+    "numero_risultati_ottenuti_query": 9,
+    "numero_risultati_in_risposta_llm": 9
+  },
+  {
+    "id": "MEDIUM_02",
+    "livello": "Medio",
+    "domanda_naturale": "Elenca tutti i casi di cronaca avvenuti specificamente nella città di Milano o di Torino.",
+    "cypher_ottimale": "MATCH (c:Case)-[:OCCURRED_AT]-(l:Location) WHERE toLower(l.name) CONTAINS 'milano' OR toLower(l.name) CONTAINS 'torino' RETURN c.name AS caso, l.name AS comune",
+    "cypher_generato": "MATCH (c:Case)-[:OCCURRED_AT]-(l:Location) WHERE toLower(l.name) CONTAINS 'milano' OR toLower(l.name) CONTAINS 'torino' RETURN c.name AS case_name, l.name AS location_name",
+    "risultato_atteso": ["Morte di Diana Pifferi", "Omicidio di Erio Codecà", "Omicidio di Maurizio Gucci"],
+    "numero_risultati_attesi": 7,
+    "numero_risultati_ottenuti_query": 7,
+    "numero_risultati_in_risposta_llm": 7
+  },
+  {
+    "id": "MEDIUM_03",
+    "livello": "Medio",
+    "domanda_naturale": "Estrai le persone registrate nel database per cui è esplicitamente indicato il ruolo o la professione e il relativo caso associato.",
+    "cypher_ottimale": "MATCH (p:Person)-[:IS_SUSPECTED_IN|COMMITTED|INVOLVED_IN|IS_VICTIM_OF]-(c:Case) WHERE p.role IS NOT NULL OR p.profession IS NOT NULL RETURN p.name AS persona, coalesce(p.role, p.profession) AS dettaglio, c.name AS caso",
+    "cypher_generato": "MATCH (p:Person)-[r:INVOLVED_IN|IS_VICTIM_OF|COMMITTED|IS_SUSPECTED_IN]-(c:Case) WHERE p.role IS NOT NULL OR p.profession IS NOT NULL RETURN p.name AS name, p.role AS role, p.profession AS profession, c.name AS case_name",
+    "risultato_atteso": ["Francesca Alinovi", "Giacomo Matteotti", "Alessia Pifferi"],
+    "numero_risultati_attesi": 223,
+    "numero_risultati_ottenuti_query": 223,
+    "numero_risultati_in_risposta_llm": 7
+  },
+  {
+    "id": "MEDIUM_04",
+    "livello": "Medio",
+    "domanda_naturale": "Trova modelli o tipologie di armi che compaiono come arma utilizzata in più di un caso di cronaca distinto?",
+    "cypher_ottimale": "MATCH (w:Weapon)-[:USED_IN]-(c:Case) WITH w, count(DISTINCT c) AS num_casi, collect(c.name) AS casi WHERE num_casi > 1 RETURN w.name AS arma, num_casi, casi",
+    "cypher_generato": "MATCH (w:Weapon)-[:USED_IN]-(c:Case) WITH w, count(DISTINCT c) AS case_count WHERE case_count > 1 RETURN w.name AS weapon, case_count",
+    "risultato_atteso": ["coltello", "pistola di Santangelo", "bastone"],
+    "numero_risultati_attesi": 3,
+    "numero_risultati_ottenuti_query": 3,
+    "numero_risultati_in_risposta_llm": 3
+  },
+  {
+    "id": "HARD_01",
+    "livello": "Difficile",
+    "domanda_naturale": "Quali sono le 3 località o città che concentrano il maggior numero di casi di cronaca registrati nel grafo?",
+    "cypher_ottimale": "MATCH (c:Case)-[:OCCURRED_AT]-(l:Location) RETURN l.name AS luogo, count(DISTINCT c) AS num_casi ORDER BY num_casi DESC LIMIT 3",
+    "cypher_generato": "MATCH (c:Case)-[:OCCURRED_AT]-(l:Location) RETURN l.name AS location, count(c) AS case_count ORDER BY case_count DESC LIMIT 3",
+    "risultato_atteso": ["Milano", "Roma"],
+    "numero_risultati_attesi": 2,
+    "numero_risultati_ottenuti_query": 2,
+    "numero_risultati_in_risposta_llm": 2
+  },
+  {
+    "id": "HARD_02",
+    "livello": "Difficile",
+    "domanda_naturale": "Quali e quanti sono i casi di cronaca presenti nel grafo che vedono vittime di sesso femminile avvenuti dal 2000 in poi (considerando sia la data del caso che la data di decesso della vittima)?",
+    "cypher_ottimale": "MATCH (p:Person)-[:IS_VICTIM_OF]-(c:Case) WHERE (toLower(p.gender) CONTAINS 'female' OR toLower(p.gender) CONTAINS 'femm' OR toLower(p.gender) IN ['f', 'donna']) AND (p.date_of_death >= '2000' OR c.data_evento >= '2000' OR c.date >= '2000') RETURN count(DISTINCT c) AS num_casi, collect(DISTINCT c.name) AS elenco_casi",
+    "cypher_generato": "MATCH (p:Person)-[:IS_VICTIM_OF]-(c:Case) WHERE toLower(p.gender) IN ['female', 'f', 'donna'] AND (c.date >= '2000' OR p.date_of_death >= '2000') RETURN c.name AS case_name, c.date AS case_date, p.name AS victim_name, p.date_of_death AS death_date",
+    "risultato_atteso": ["Delitto di Garlasco", "Morte di Diana Pifferi", "Omicidio di Pamela Mastropietro"],
+    "numero_risultati_attesi": 7,
+    "numero_risultati_ottenuti_query": 7,
+    "numero_risultati_in_risposta_llm": 7
+  },
+  {
+    "id": "HARD_03",
+    "livello": "Difficile",
+    "domanda_naturale": "Estrai l'età di tutte le vittime di cui si conosce l'età al momento del delitto, ordinandole in modo decrescente (dal più anziano al più giovane).",
+    "cypher_ottimale": "MATCH (p:Person)-[:IS_VICTIM_OF]-(c:Case) WHERE p.age IS NOT NULL RETURN p.name AS vittima, p.age AS eta, c.name AS caso ORDER BY toInteger(p.age) DESC",
+    "cypher_generato": "MATCH (p:Person)-[:IS_VICTIM_OF]-(c:Case) WHERE p.age IS NOT NULL RETURN p.name AS name, p.age AS age, c.name AS case_name ORDER BY p.age DESC",
+    "risultato_atteso": ["Aldo Donegani", "Chiara Poggi", "Diana Pifferi"],
+    "numero_risultati_attesi": 55,
+    "numero_risultati_ottenuti_query": 55,
+    "numero_risultati_in_risposta_llm": 55
+  }
+]

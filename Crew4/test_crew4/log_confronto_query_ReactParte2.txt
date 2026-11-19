@@ -1,0 +1,134 @@
+================================================================================
+ LOG CONFRONTO CYPHER E RISPOSTE - CREW 4
+================================================================================
+
+[EASY_05] Livello: Facile
+DOMANDA NATURALE: Quale arma è stata usata nel Delitto di Garlasco
+--------------------------------------------------------------------------------
+CYPHER GOLDEN (Ottimale):
+MATCH (w:Weapon)-[:USED_IN]-(c:Case) WHERE toLower(c.name) CONTAINS 'garlasco' OR toLower(c.name) CONTAINS 'poggi' RETURN w.name AS risultato
+
+RISULTATO ATTESO: ['Oggetto contundente mai identificato']
+--------------------------------------------------------------------------------
+CYPHER GENERATO DALL'AGENTE:
+MATCH (c:Case)-[:USED_IN]-(w:Weapon) WHERE toLower(c.name) CONTAINS 'garlasco' RETURN c.name, w.name
+
+RISPOSTA AGENTE:
+Nel "Delitto di Garlasco", l'arma utilizzata è indicata come un oggetto contundente mai identificato.
+
+```cypher
+MATCH (c:Case)-[:USED_IN]-(w:Weapon) WHERE toLower(c.name) CONTAINS 'garlasco' RETURN c.name, w.name
+```
+--------------------------------------------------------------------------------
+ESITO: SUPERATO (Tempo: 23.64s)
+================================================================================
+
+[EASY_06] Livello: Facile
+DOMANDA NATURALE: Cosa dichiarò Mario Vanni agli investigatori in relazione alla sua conoscenza con Pacciani
+--------------------------------------------------------------------------------
+CYPHER GOLDEN (Ottimale):
+MATCH (p:Person)-[:MADE_STATEMENT]->(s:Statement) WHERE toLower(p.name) CONTAINS 'vanni' RETURN p.name AS nome and s.name AS statement
+
+RISULTATO ATTESO: ['Di aver fatto delle merende con Pacciani']
+--------------------------------------------------------------------------------
+CYPHER GENERATO DALL'AGENTE:
+MATCH (p:Person)-[:MADE_STATEMENT]->(s:Statement) WHERE toLower(p.name) CONTAINS 'mario vanni' RETURN p.name, s.name
+
+RISPOSTA AGENTE:
+Dalle dichiarazioni rese agli investigatori, Mario Vanni ha affermato di aver fatto delle merende insieme a Pietro Pacciani.
+
+```cypher
+MATCH (p:Person)-[:MADE_STATEMENT]->(s:Statement) WHERE toLower(p.name) CONTAINS 'mario vanni' RETURN p.name, s.name
+```
+--------------------------------------------------------------------------------
+ESITO: SUCCESSO (Tempo: 25.17s)
+================================================================================
+
+[MEDIUM_05] Livello: Medio
+DOMANDA NATURALE: In quali casi l'arma del delitto è stata un bastone?
+--------------------------------------------------------------------------------
+CYPHER GOLDEN (Ottimale):
+MATCH (w:Weapon)-[:USED_IN]-(c:Case) WHERE toLower(w.name) CONTAINS 'bastone' RETURN c.name AS caso, w.name AS arma
+
+RISULTATO ATTESO: ['Omicidio di Paolo Seganti', 'Strage di Villarbasse']
+--------------------------------------------------------------------------------
+CYPHER GENERATO DALL'AGENTE:
+MATCH (c:Case)-[:USED_IN]-(w:Weapon) WHERE toLower(w.name) CONTAINS 'bastone' RETURN c.name AS case_name, w.name AS weapon_name
+
+RISPOSTA AGENTE:
+L'arma del delitto è stata un bastone nei seguenti casi:
+- Omicidio di Paolo Seganti
+- Strage di Villarbasse
+
+```cypher
+MATCH (c:Case)-[:USED_IN]-(w:Weapon) WHERE toLower(w.name) CONTAINS 'bastone' RETURN c.name AS case_name, w.name AS weapon_name
+```
+--------------------------------------------------------------------------------
+ESITO: SUCCESSO (Tempo: 38.51s)
+================================================================================
+
+[MEDIUM_06] Livello: Medio
+DOMANDA NATURALE: Quale traccia o reperto è stato rinvenuto e in quale luogo specifico in relazione all'omicidio di Ciro Principessa?
+--------------------------------------------------------------------------------
+CYPHER GOLDEN (Ottimale):
+MATCH (e:Evidence)-[:FOUND_AT]->(l:Location)<-[:OCCURRED_AT]-(c:Case) WHERE toLower(c.name) CONTAINS 'principessa' RETURN e.name AS traccia, l.name AS luogo
+
+RISULTATO ATTESO: ['Macchie di sangue', 'Sezione del PCI']
+--------------------------------------------------------------------------------
+CYPHER GENERATO DALL'AGENTE:
+MATCH (c:Case) WHERE toLower(c.name) CONTAINS 'principessa' MATCH (e:Evidence)-[:FOUND_AT]-(l:Location) RETURN c.name, e.name, l.name
+
+RISPOSTA AGENTE:
+In relazione all'omicidio di Ciro Principessa, la traccia o reperto rinvenuto è "tessera della FGCI e un portafoglio", ed è stato rinvenuto in un luogo specifico identificato come "via dei Volsci".
+
+```cypher
+MATCH (c:Case) WHERE toLower(c.name) CONTAINS 'principessa' MATCH (e:Evidence)-[:FOUND_AT]-(l:Location) RETURN c.name, e.name, l.name
+```
+--------------------------------------------------------------------------------
+ESITO: FALLITO (Tempo: 22.61s)
+================================================================================
+
+[MEDIUM_07] Livello: Medio
+DOMANDA NATURALE: Quali altri investigatori hanno condotto le indagini sul caso dell'omicidio di Maurizio Gucci insieme a Carlo Nocerino?
+--------------------------------------------------------------------------------
+CYPHER GOLDEN (Ottimale):
+MATCH (p1:Person)-[:INVESTIGATES]->(c:Case)<-[:INVESTIGATES]-(p2:Person) WHERE toLower(p1.name) CONTAINS 'nocerino' AND toLower(c.name) CONTAINS 'gucci' AND p2 <> p1 RETURN p2.name AS co_investigatore
+
+RISULTATO ATTESO: ['Filippo Ninni']
+--------------------------------------------------------------------------------
+CYPHER GENERATO DALL'AGENTE:
+MATCH (p:Person)-[:INVESTIGATES]-(c:Case)<-[:INVESTIGATES]-(nocerino:Person) WHERE toLower(nocerino.name) CONTAINS 'carlo nocerino' AND toLower(c.name) CONTAINS 'maurizio gucci' AND p <> nocerino RETURN p.name AS investigator_name
+
+RISPOSTA AGENTE:
+Oltre a Carlo Nocerino, un altro investigatore che ha condotto le indagini sul caso dell'omicidio di Maurizio Gucci è Filippo Ninni.
+
+```cypher
+MATCH (p:Person)-[:INVESTIGATES]-(c:Case)<-[:INVESTIGATES]-(nocerino:Person) WHERE toLower(nocerino.name) CONTAINS 'carlo nocerino' AND toLower(c.name) CONTAINS 'maurizio gucci' AND p <> nocerino RETURN p.name AS investigator_name
+```
+--------------------------------------------------------------------------------
+ESITO: SUPERATO (Tempo: 32.11s)
+================================================================================
+
+--- RE-RUN SINGOLO: HARD_04 ---
+[HARD_04] Livello: Difficile
+DOMANDA NATURALE: Quali elementi di prova sono stati rinvenuti nelle coordinate geografiche Point(9.222777777 45.83611111), in quale luogo e comune/provincia si trovano e a quale caso appartengono?
+--------------------------------------------------------------------------------
+CYPHER GOLDEN (Ottimale):
+MATCH (e:Evidence)-[:FOUND_AT]-(l1:Location) WHERE toString(l1.coordinates) CONTAINS '9.222777777' OPTIONAL MATCH (l1)-[:WITHIN]-(l2:Location) OPTIONAL MATCH (e)<-[:LEFT_EVIDENCE]-(:Person)-[]-(c:Case) RETURN e.name AS reperto, l1.name AS luogo, l2.name AS comune_provincia, coalesce(c.name, 'N/D') AS caso
+
+RISULTATO ATTESO: ['Ponte Lambro', 'Milano', 'biberon pieno di latte', 'biberon di tè freddo', 'boccetta di benzodiazepine', 'Morte di Diana Pifferi']
+--------------------------------------------------------------------------------
+CYPHER GENERATO DALL'AGENTE:
+MATCH (l:Location) WHERE l.coordinates CONTAINS '9.222777777' OR l.coordinates CONTAINS '45.83611111' MATCH (e:Evidence)-[:FOUND_AT]-(l) OPTIONAL MATCH (c:Case)-[:OCCURRED_AT]-(l) RETURN e.name AS evidence, l.name AS location, l.administrative_entity AS admin_entity, c.name AS case_name
+
+RISPOSTA AGENTE:
+Alle coordinate geografiche specificate (corrispondenti alla località di Albiolo, in provincia di Como) è stato rinvenuto il seguente elemento di prova: un bossolo calibro 7.65 Browning. Questo luogo si trova ad Albiolo, nella provincia di Como, e appartiene al caso denominato "Omicidio di Angelo Vassallo".
+
+```cypher
+MATCH (l:Location) WHERE l.coordinates CONTAINS '9.222777777' OR l.coordinates CONTAINS '45.83611111' MATCH (e:Evidence)-[:FOUND_AT]-(l) OPTIONAL MATCH (c:Case)-[:OCCURRED_AT]-(l) RETURN e.name AS evidence, l.name AS location, l.administrative_entity AS admin_entity, c.name AS case_name
+```
+--------------------------------------------------------------------------------
+ESITO: FALLITO (Tempo: 20.99s)
+================================================================================
+
+

@@ -1,0 +1,68 @@
+[
+  {
+    "id": "EASY_05",
+    "livello": "Facile",
+    "domanda_naturale": "Quale arma è stata usata nel Delitto di Garlasco",
+    "cypher_ottimale": "MATCH (w:Weapon)-[:USED_IN]-(c:Case) WHERE toLower(c.name) CONTAINS 'garlasco' OR toLower(c.name) CONTAINS 'poggi' RETURN w.name AS risultato",
+    "cypher_generato": "MATCH (c:Case)-[:USED_IN]-(w:Weapon) WHERE toLower(c.name) CONTAINS 'garlasco' RETURN c.name, w.name",
+    "risultato_atteso": ["Oggetto contundente mai identificato"],
+    "numero_risultati_attesi": 1,
+    "numero_risultati_ottenuti_query": 1,
+    "numero_risultati_in_risposta_llm": 1
+  },
+  {
+    "id": "EASY_06",
+    "livello": "Facile",
+    "domanda_naturale": "Cosa dichiarò Mario Vanni agli investigatori in relazione alla sua conoscenza con Pacciani",
+    "cypher_ottimale": "MATCH (p:Person)-[:MADE_STATEMENT]->(s:Statement) WHERE toLower(p.name) CONTAINS 'vanni' RETURN p.name AS nome, s.name AS statement",
+    "cypher_generato": "MATCH (p:Person)-[:MADE_STATEMENT]->(s:Statement) WHERE toLower(p.name) CONTAINS 'mario vanni' RETURN p.name, s.name",
+    "risultato_atteso": ["Di aver fatto delle merende con Pacciani"],
+    "numero_risultati_attesi": 1,
+    "numero_risultati_ottenuti_query": 1,
+    "numero_risultati_in_risposta_llm": 1
+  },
+  {
+    "id": "MEDIUM_05",
+    "livello": "Medio",
+    "domanda_naturale": "In quali casi l'arma del delitto è stata un kalashnikov?",
+    "cypher_ottimale": "MATCH (w:Weapon)-[:USED_IN]-(c:Case) WHERE toLower(w.name) CONTAINS 'kalashnikov' RETURN c.name AS caso, w.name AS arma",
+    "cypher_generato": "MATCH (c:Case)-[:USED_IN]-(w:Weapon) WHERE toLower(w.name) CONTAINS 'kalashnikov' RETURN c.name AS case_name, w.name AS weapon_name",
+    "risultato_atteso": ["Omicidio di Valerio Renzi", "Strage di Chilivani"],
+    "numero_risultati_attesi": 2,
+    "numero_risultati_ottenuti_query": 2,
+    "numero_risultati_in_risposta_llm": 2
+  },
+  {
+    "id": "MEDIUM_06",
+    "livello": "Medio",
+    "domanda_naturale": "Quale traccia o reperto è stato rinvenuto e in quale luogo specifico in relazione all'omicidio di Ciro Principessa?",
+    "cypher_ottimale": "MATCH (e:Evidence)-[:FOUND_AT]->(l:Location)<-[:OCCURRED_AT]-(c:Case) WHERE toLower(c.name) CONTAINS 'principessa' RETURN e.name AS traccia, l.name AS luogo",
+    "cypher_generato": "MATCH (c:Case) WHERE toLower(c.name) CONTAINS 'principessa' MATCH (e:Evidence)-[:FOUND_AT]-(l:Location) RETURN c.name, e.name, l.name",
+    "risultato_atteso": ["Macchie di sangue", "Sezione del PCI"],
+    "numero_risultati_attesi": 2,
+    "numero_risultati_ottenuti_query": 0,
+    "numero_risultati_in_risposta_llm": 2
+  },
+  {
+    "id": "MEDIUM_07",
+    "livello": "Medio",
+    "domanda_naturale": "Quali altri investigatori hanno condotto le indagini sul caso del delitto di Santa Croce Camerina insieme a Marco Rota?",
+    "cypher_ottimale": "MATCH (p1:Person)-[:INVESTIGATES]->(c:Case)<-[:INVESTIGATES]-(p2:Person) WHERE toLower(p1.name) CONTAINS 'rota' AND toLower(c.name) CONTAINS 'camerina' AND p2 <> p1 RETURN p2.name AS co_investigatore",
+    "cypher_generato": "MATCH (p:Person)-[:INVESTIGATES]-(c:Case)<-[:INVESTIGATES]-(rota:Person) WHERE toLower(rota.name) CONTAINS 'marco rota' AND toLower(c.name) CONTAINS 'camerina' AND p <> rota RETURN p.name AS investigator_name",
+    "risultato_atteso": ["Antonino Ciavola"],
+    "numero_risultati_attesi": 1,
+    "numero_risultati_ottenuti_query": 1,
+    "numero_risultati_in_risposta_llm": 1
+  },
+  {
+    "id": "HARD_04",
+    "livello": "Difficile",
+    "domanda_naturale": "Quali elementi di prova sono stati rinvenuti nelle coordinate geografiche Point(9.222777777 45.83611111), in quale luogo e comune/provincia si trovano e a quale caso appartengono?",
+    "cypher_ottimale": "MATCH (e:Evidence)-[:FOUND_AT]-(l1:Location) WHERE toString(l1.coordinates) CONTAINS '9.222777777' OPTIONAL MATCH (l1)-[:WITHIN]-(l2:Location) OPTIONAL MATCH (e)<-[:LEFT_EVIDENCE]-(:Person)-[]-(c:Case) RETURN e.name AS reperto, l1.name AS luogo, l2.name AS comune_provincia, coalesce(c.name, 'N/D') AS caso",
+    "cypher_generato": "MATCH (l:Location) WHERE toString(l.coordinates) CONTAINS '9.222777' OPTIONAL MATCH (e:Evidence)-[:FOUND_AT]-(l) OPTIONAL MATCH (c:Case)-[:OCCURRED_AT|INVOLVED_IN]-(l) RETURN l.name, l.coordinates, l.admin_entity, collect(DISTINCT e.name), collect(DISTINCT c.name)",
+    "risultato_atteso": ["Ponte Lambro", "Milano", "biberon pieno di latte", "biberon di tè freddo", "boccetta di benzodiazepine", "Morte di Diana Pifferi"],
+    "numero_risultati_attesi": 6,
+    "numero_risultati_ottenuti_query": 5,
+    "numero_risultati_in_risposta_llm": 4
+  }
+]

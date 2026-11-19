@@ -1,0 +1,11 @@
+REPORT TIPO: CRUDO
+CASO                           | REACT COS | REACT ROUGE | LLM COS   | LLM ROUGE
+--------------------------------------------------------------------------------
+delitto_di_cogne               | 0.6750    | 0.4396      | 1.0000    | 1.0000
+delitto_di_novi_ligure         | 0.7028    | 0.4263      | 1.0000    | 1.0000
+omicidio_di_alberto_brasili    | 0.8210    | 0.6495      | 0.8274    | 0.6454
+omicidio_di_giulia_cecchettin  | 0.7499    | 0.4912      | 0.9189    | 0.7352
+omicidio_di_marco_vannini      | 0.6553    | 0.3922      | 0.9274    | 0.8074
+omicidio_di_marta_russo        | 1.0000    | 1.0000      | 0.9150    | 0.7641
+--------------------------------------------------------------------------------
+MEDIA GLOBALE                  | 0.7673    | 0.5665      | 0.9315    | 0.8253

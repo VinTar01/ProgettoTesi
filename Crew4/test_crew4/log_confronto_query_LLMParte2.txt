@@ -1,0 +1,141 @@
+================================================================================
+ LOG CONFRONTO CYPHER E RISPOSTE - CREW 4
+================================================================================
+
+[EASY_05] Livello: Facile
+DOMANDA NATURALE: Quale arma è stata usata nel Delitto di Garlasco
+--------------------------------------------------------------------------------
+CYPHER GOLDEN (Ottimale):
+MATCH (w:Weapon)-[:USED_IN]-(c:Case) WHERE toLower(c.name) CONTAINS 'garlasco' OR toLower(c.name) CONTAINS 'poggi' RETURN w.name AS risultato
+
+RISULTATO ATTESO: ['Oggetto contundente mai identificato']
+--------------------------------------------------------------------------------
+CYPHER GENERATO DALL'AGENTE:
+MATCH (c:Case)-[:USED_IN]-(w:Weapon) WHERE toLower(c.name) CONTAINS 'garlasco' RETURN c.name, w.name
+
+RISPOSTA AGENTE:
+Nel "Delitto di Garlasco", l'arma utilizzata è indicata come un oggetto contundente mai identificato.
+
+```cypher
+MATCH (c:Case)-[:USED_IN]-(w:Weapon) WHERE toLower(c.name) CONTAINS 'garlasco' RETURN c.name, w.name
+```
+--------------------------------------------------------------------------------
+ESITO: SUPERATO (Tempo: 23.64s)
+================================================================================
+
+[EASY_06] Livello: Facile
+DOMANDA NATURALE: Cosa dichiarò Mario Vanni agli investigatori in relazione alla sua conoscenza con Pacciani
+--------------------------------------------------------------------------------
+CYPHER GOLDEN (Ottimale):
+MATCH (p:Person)-[:MADE_STATEMENT]->(s:Statement) 
+WHERE toLower(p.name) CONTAINS 'vanni' 
+RETURN p.name AS nome, s.name AS statement
+
+RISULTATO ATTESO: ['Di aver fatto delle merende con Pacciani']
+--------------------------------------------------------------------------------
+CYPHER GENERATO DALL'AGENTE:
+MATCH (p:Person)-[:MADE_STATEMENT]->(s:Statement) WHERE toLower(p.name) CONTAINS 'mario vanni' RETURN p.name, s.name
+
+RISPOSTA AGENTE:
+Dalle dichiarazioni rese agli investigatori, Mario Vanni ha affermato di aver fatto delle merende insieme a Pietro Pacciani.
+
+```cypher
+MATCH (p:Person)-[:MADE_STATEMENT]->(s:Statement) WHERE toLower(p.name) CONTAINS 'mario vanni' RETURN p.name, s.name
+```
+--------------------------------------------------------------------------------
+ESITO: SUCCESSO (Tempo: 25.17s)
+================================================================================
+
+[MEDIUM_05] Livello: Medio
+DOMANDA NATURALE: In quali casi l'arma del delitto è stata un kalashnikov?
+--------------------------------------------------------------------------------
+CYPHER GOLDEN (Ottimale):
+MATCH (w:Weapon)-[:USED_IN]-(c:Case) WHERE toLower(w.name) CONTAINS 'kalashnikov' RETURN c.name AS caso, w.name AS arma
+
+RISULTATO ATTESO: ['Omicidio di Valerio Renzi', 'Strage di Chilivani']
+--------------------------------------------------------------------------------
+CYPHER GENERATO DALL'AGENTE:
+MATCH (c:Case)-[:USED_IN]-(w:Weapon) WHERE toLower(w.name) CONTAINS 'kalashnikov' RETURN c.name AS case_name, w.name AS weapon_name
+
+RISPOSTA AGENTE:
+L'arma del delitto è stata un kalashnikov nei seguenti casi:
+- Omicidio di Valerio Renzi
+- Strage di Chilivani
+
+```cypher
+MATCH (c:Case)-[:USED_IN]-(w:Weapon) WHERE toLower(w.name) CONTAINS 'kalashnikov' RETURN c.name AS case_name, w.name AS weapon_name
+```
+--------------------------------------------------------------------------------
+ESITO: SUCCESSO (Tempo: 38.51s)
+================================================================================
+
+[MEDIUM_06] Livello: Medio
+DOMANDA NATURALE: Quale traccia o reperto è stato rinvenuto e in quale luogo specifico in relazione all'omicidio di Ciro Principessa?
+--------------------------------------------------------------------------------
+CYPHER GOLDEN (Ottimale):
+MATCH (e:Evidence)-[:FOUND_AT]->(l:Location)<-[:OCCURRED_AT]-(c:Case) WHERE toLower(c.name) CONTAINS 'principessa' RETURN e.name AS traccia, l.name AS luogo
+
+RISULTATO ATTESO: ['Macchie di sangue', 'Sezione del PCI']
+--------------------------------------------------------------------------------
+CYPHER GENERATO DALL'AGENTE:
+MATCH (c:Case) WHERE toLower(c.name) CONTAINS 'principessa' MATCH (e:Evidence)-[:FOUND_AT]-(l:Location) RETURN c.name, e.name, l.name
+
+RISPOSTA AGENTE:
+In relazione all'omicidio di Ciro Principessa, la traccia o reperto rinvenuto è "tessera della FGCI e un portafoglio", ed è stato rinvenuto in un luogo specifico identificato come "via dei Volsci".
+
+```cypher
+MATCH (c:Case) WHERE toLower(c.name) CONTAINS 'principessa' MATCH (e:Evidence)-[:FOUND_AT]-(l:Location) RETURN c.name, e.name, l.name
+```
+--------------------------------------------------------------------------------
+ESITO: FALLITO - la query è troppo generica e restituisce tracce di altri casi (Tempo: 22.61s)
+================================================================================
+
+[MEDIUM_07] Livello: Medio
+DOMANDA NATURALE: Quali altri investigatori hanno condotto le indagini sul caso del delitto di Santa Croce Camerina insieme a Marco Rota?
+--------------------------------------------------------------------------------
+CYPHER GOLDEN (Ottimale):
+MATCH (p1:Person)-[:INVESTIGATES]->(c:Case)<-[:INVESTIGATES]-(p2:Person) WHERE toLower(p1.name) CONTAINS 'rota' AND toLower(c.name) CONTAINS 'camerina' AND p2 <> p1 RETURN p2.name AS co_investigatore
+
+RISULTATO ATTESO: ['Antonino Ciavola']
+--------------------------------------------------------------------------------
+CYPHER GENERATO DALL'AGENTE:
+MATCH (p:Person)-[:INVESTIGATES]-(c:Case)<-[:INVESTIGATES]-(rota:Person) WHERE toLower(rota.name) CONTAINS 'marco rota' AND toLower(c.name) CONTAINS 'camerina' AND p <> rota RETURN p.name AS investigator_name
+
+RISPOSTA AGENTE:
+La persona che ha investigato insieme a Marco Rota nel caso di Santa Croce Camerina è Antonino Ciavola.
+
+```cypher
+MATCH (p:Person)-[:INVESTIGATES]-(c:Case)<-[:INVESTIGATES]-(rota:Person) WHERE toLower(rota.name) CONTAINS 'marco rota' AND toLower(c.name) CONTAINS 'camerina' AND p <> rota RETURN p.name AS investigator_name
+```
+--------------------------------------------------------------------------------
+ESITO: SUPERATO (Tempo: 32.11s)
+================================================================================
+
+--- RE-RUN SINGOLO: HARD_04 ---
+[HARD_04] Livello: Difficile
+DOMANDA NATURALE: Quali elementi di prova sono stati rinvenuti nelle coordinate geografiche Point(9.222777777 45.83611111), in quale luogo e comune/provincia si trovano e a quale caso appartengono?
+--------------------------------------------------------------------------------
+CYPHER GOLDEN (Ottimale):
+MATCH (e:Evidence)-[:FOUND_AT]-(l1:Location) WHERE toString(l1.coordinates) CONTAINS '9.222777777' OPTIONAL MATCH (l1)-[:WITHIN]-(l2:Location) OPTIONAL MATCH (e)<-[:LEFT_EVIDENCE]-(:Person)-[]-(c:Case) RETURN e.name AS reperto, l1.name AS luogo, l2.name AS comune_provincia, coalesce(c.name, 'N/D') AS caso
+
+RISULTATO ATTESO: ['Ponte Lambro', 'Milano', 'biberon pieno di latte', 'biberon di tè freddo', 'boccetta di benzodiazepine', 'Morte di Diana Pifferi']
+--------------------------------------------------------------------------------
+CYPHER GENERATO DALL'AGENTE:
+MATCH (l:Location) WHERE toString(l.coordinates) CONTAINS '9.222777' OPTIONAL MATCH (e:Evidence)-[:FOUND_AT]-(l) OPTIONAL MATCH (c:Case)-[:OCCURRED_AT|INVOLVED_IN]-(l) RETURN l.name, l.coordinates, l.admin_entity, collect(DISTINCT e.name), collect(DISTINCT c.name)
+
+RISPOSTA AGENTE:
+Alle coordinate geografiche richieste (e più precisamente in prossimità di Ponte Lambro, con coordinate registrate come Point(9.222777777 45.437222)), gli elementi di prova rinvenuti sono:
+- Biberon pieno di latte
+- Boccetta di benzodiazepine
+- Biberon di tè freddo
+
+Tuttavia, non risultano collegamenti diretti nel database tramite relazioni di tipo `OCCURRED_AT` o `INVOLVED_IN` con un caso specifico per questo specifico luogo.
+
+```cypher
+MATCH (l:Location) WHERE toString(l.coordinates) CONTAINS '9.222777' OPTIONAL MATCH (e:Evidence)-[:FOUND_AT]-(l) OPTIONAL MATCH (c:Case)-[:OCCURRED_AT|INVOLVED_IN]-(l) RETURN l.name, l.coordinates, l.admin_entity, collect(DISTINCT e.name), collect(DISTINCT c.name)
+```
+--------------------------------------------------------------------------------
+ESITO: SUCCESSO - 5/6 (Tempo: 5.64s)
+================================================================================
+
+

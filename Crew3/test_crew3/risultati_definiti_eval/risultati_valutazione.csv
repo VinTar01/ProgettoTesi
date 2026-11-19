@@ -1,0 +1,6 @@
+Metrica,Valore Assoluto,Percentuale
+Coverage Metodo A (LLM + SPARQL),5/20,25.00%
+Coverage Metodo B (API Fuzzy / Crew3 Totale),18/20,90.00%
+Coverage Metodo B Netto (Validati dall'Agente),14/20,70.00%
+Semantic Shift Rilevati dall'Agente,4/18,22.22%
+Semantic Shift Reali (Ground Truth),5/18,27.78%

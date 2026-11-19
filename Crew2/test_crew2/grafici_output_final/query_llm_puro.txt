@@ -1,0 +1,843 @@
+
+--- NUOVO CASO LLM PURO (ZERO-SHOT) ---
+
+MERGE (n_case_delitto_di_cogne:Case {id: "case_delitto_di_cogne"})
+SET n_case_delitto_di_cogne.name = "Delitto di Cogne"
+
+MERGE (n_person_samuele_lorenzi:Person {id: "person_samuele_lorenzi"})
+SET n_person_samuele_lorenzi.name = "Samuele Lorenzi",
+    n_person_samuele_lorenzi.role = "Victim",
+    n_person_samuele_lorenzi.gender = "Male",
+    n_person_samuele_lorenzi.age = "3",
+    n_person_samuele_lorenzi.date_of_death = "January 30, 2002",
+    n_person_samuele_lorenzi.is_deceased = true
+
+MERGE (n_person_annamaria_franzoni:Person {id: "person_annamaria_franzoni"})
+SET n_person_annamaria_franzoni.name = "Annamaria Franzoni",
+    n_person_annamaria_franzoni.role = "Suspect",
+    n_person_annamaria_franzoni.gender = "Female",
+    n_person_annamaria_franzoni.is_deceased = false
+
+MERGE (n_person_davide_lorenzi:Person {id: "person_davide_lorenzi"})
+SET n_person_davide_lorenzi.name = "Davide Lorenzi",
+    n_person_davide_lorenzi.role = "Witness",
+    n_person_davide_lorenzi.gender = "Male",
+    n_person_davide_lorenzi.is_deceased = false
+
+MERGE (n_person_ada_satragni:Person {id: "person_ada_satragni"})
+SET n_person_ada_satragni.name = "Ada Satragni",
+    n_person_ada_satragni.role = "Witness",
+    n_person_ada_satragni.gender = "Female",
+    n_person_ada_satragni.is_deceased = false
+
+MERGE (n_person_maria_carla_davieri:Person {id: "person_maria_carla_davieri"})
+SET n_person_maria_carla_davieri.name = "Maria Carla Davieri",
+    n_person_maria_carla_davieri.role = "Prosecutor",
+    n_person_maria_carla_davieri.gender = "Female",
+    n_person_maria_carla_davieri.profession = "Prosecutor",
+    n_person_maria_carla_davieri.is_deceased = false
+
+MERGE (n_person_carlo_taormina:Person {id: "person_carlo_taormina"})
+SET n_person_carlo_taormina.name = "Carlo Taormina",
+    n_person_carlo_taormina.role = "Lawyer",
+    n_person_carlo_taormina.gender = "Male",
+    n_person_carlo_taormina.profession = "Lawyer",
+    n_person_carlo_taormina.is_deceased = false
+
+MERGE (n_person_paola_savio:Person {id: "person_paola_savio"})
+SET n_person_paola_savio.name = "Paola Savio",
+    n_person_paola_savio.role = "Lawyer",
+    n_person_paola_savio.gender = "Female",
+    n_person_paola_savio.profession = "Lawyer",
+    n_person_paola_savio.is_deceased = false
+
+MERGE (n_location_cogne:Location {id: "location_cogne"})
+SET n_location_cogne.name = "Cogne"
+
+MERGE (n_location_aosta_valley:Location {id: "location_aosta_valley"})
+SET n_location_aosta_valley.name = "Aosta Valley"
+
+MERGE (n_location_home:Location {id: "location_home"})
+SET n_location_home.name = "Home in Cogne"
+
+MERGE (n_weapon_copper_headed_masonry_hammer:Weapon {id: "weapon_copper_headed_masonry_hammer"})
+SET n_weapon_copper_headed_masonry_hammer.name = "Copper-headed masonry hammer"
+
+MERGE (n_evidence_blood:Evidence {id: "evidence_blood"})
+SET n_evidence_blood.name = "Blood"
+
+MERGE (n_evidence_bloody_footprints:Evidence {id: "evidence_bloody_footprints"})
+SET n_evidence_bloody_footprints.name = "Bloody footprints"
+
+MERGE (n_evidence_fingerprints:Evidence {id: "evidence_fingerprints"})
+SET n_evidence_fingerprints.name = "Fingerprints"
+
+MERGE (n_statement_annamaria_franzoni_innocence:Statement {id: "statement_annamaria_franzoni_innocence"})
+SET n_statement_annamaria_franzoni_innocence.name = "Claims of innocence and unknown intruder"
+
+MERGE (n_charge_voluntary_manslaughter:Charge {id: "charge_voluntary_manslaughter"})
+SET n_charge_voluntary_manslaughter.name = "Voluntary manslaughter"
+
+MATCH (s {id: "person_samuele_lorenzi"}), (t {id: "case_delitto_di_cogne"}) MERGE (s)-[:IS_VICTIM_OF]->(t)
+MATCH (s {id: "person_annamaria_franzoni"}), (t {id: "case_delitto_di_cogne"}) MERGE (s)-[:IS_SUSPECTED_IN]->(t)
+MATCH (s {id: "person_annamaria_franzoni"}), (t {id: "case_delitto_di_cogne"}) MERGE (s)-[:COMMITTED]->(t)
+MATCH (s {id: "person_maria_carla_davieri"}), (t {id: "case_delitto_di_cogne"}) MERGE (s)-[:INVESTIGATES]->(t)
+MATCH (s {id: "person_carlo_taormina"}), (t {id: "person_annamaria_franzoni"}) MERGE (s)-[:DEFENDS]->(t)
+MATCH (s {id: "person_paola_savio"}), (t {id: "person_annamaria_franzoni"}) MERGE (s)-[:DEFENDS]->(t)
+MATCH (s {id: "person_davide_lorenzi"}), (t {id: "case_delitto_di_cogne"}) MERGE (s)-[:INVOLVED_IN]->(t)
+MATCH (s {id: "person_ada_satragni"}), (t {id: "case_delitto_di_cogne"}) MERGE (s)-[:INVOLVED_IN]->(t)
+MATCH (s {id: "case_delitto_di_cogne"}), (t {id: "location_home"}) MERGE (s)-[:OCCURRED_AT]->(t)
+MATCH (s {id: "location_home"}), (t {id: "location_cogne"}) MERGE (s)-[:WITHIN]->(t)
+MATCH (s {id: "location_cogne"}), (t {id: "location_aosta_valley"}) MERGE (s)-[:WITHIN]->(t)
+MATCH (s {id: "weapon_copper_headed_masonry_hammer"}), (t {id: "case_delitto_di_cogne"}) MERGE (s)-[:USED_IN]->(t)
+MATCH (s {id: "evidence_blood"}), (t {id: "location_home"}) MERGE (s)-[:FOUND_AT]->(t)
+MATCH (s {id: "evidence_bloody_footprints"}), (t {id: "location_home"}) MERGE (s)-[:FOUND_AT]->(t)
+MATCH (s {id: "evidence_fingerprints"}), (t {id: "location_home"}) MERGE (s)-[:FOUND_AT]->(t)
+MATCH (s {id: "person_annamaria_franzoni"}), (t {id: "statement_annamaria_franzoni_innocence"}) MERGE (s)-[:MADE_STATEMENT]->(t)
+MATCH (s {id: "statement_annamaria_franzoni_innocence"}), (t {id: "case_delitto_di_cogne"}) MERGE (s)-[:RELATES_TO]->(t)
+MATCH (s {id: "person_annamaria_franzoni"}), (t {id: "charge_voluntary_manslaughter"}) MERGE (s)-[:CHARGED_WITH]->(t)
+MATCH (s {id: "case_delitto_di_cogne"}), (t {id: "charge_voluntary_manslaughter"}) MERGE (s)-[:INCLUDES_CHARGE]->(t)
+
+
+--- NUOVO CASO LLM PURO (ZERO-SHOT) ---
+
+MERGE (n_case_delitto_di_novi_ligure:Case {id: "case_delitto_di_novi_ligure"})
+SET n_case_delitto_di_novi_ligure.name = "Delitto di Novi Ligure"
+
+MERGE (n_person_erika_de_nardo:Person {id: "person_erika_de_nardo"})
+SET n_person_erika_de_nardo.name = "Erika De Nardo",
+    n_person_erika_de_nardo.role = "Killer",
+    n_person_erika_de_nardo.gender = "Female",
+    n_person_erika_de_nardo.age = "16",
+    n_person_erika_de_nardo.profession = "Student",
+    n_person_erika_de_nardo.is_deceased = false
+
+MERGE (n_person_mauro_favaro:Person {id: "person_mauro_favaro"})
+SET n_person_mauro_favaro.name = "Mauro Favaro",
+    n_person_mauro_favaro.role = "Killer",
+    n_person_mauro_favaro.gender = "Male",
+    n_person_mauro_favaro.age = "17",
+    n_person_mauro_favaro.is_deceased = false
+
+MERGE (n_person_susanna_cassini:Person {id: "person_susanna_cassini"})
+SET n_person_susanna_cassini.name = "Susanna Cassini",
+    n_person_susanna_cassini.role = "Victim",
+    n_person_susanna_cassini.gender = "Female",
+    n_person_susanna_cassini.age = "41",
+    n_person_susanna_cassini.profession = "Accountant",
+    n_person_susanna_cassini.date_of_death = "2001-02-21",
+    n_person_susanna_cassini.is_deceased = true
+
+MERGE (n_person_gianluca_de_nardo:Person {id: "person_gianluca_de_nardo"})
+SET n_person_gianluca_de_nardo.name = "Gianluca De Nardo",
+    n_person_gianluca_de_nardo.role = "Victim",
+    n_person_gianluca_de_nardo.gender = "Male",
+    n_person_gianluca_de_nardo.age = "11",
+    n_person_gianluca_de_nardo.date_of_death = "2001-02-21",
+    n_person_gianluca_de_nardo.is_deceased = true
+
+MERGE (n_person_francesco_de_nardo:Person {id: "person_francesco_de_nardo"})
+SET n_person_francesco_de_nardo.name = "Francesco De Nardo",
+    n_person_francesco_de_nardo.role = "Target",
+    n_person_francesco_de_nardo.gender = "Male",
+    n_person_francesco_de_nardo.age = "45",
+    n_person_francesco_de_nardo.profession = "Engineer and Manager",
+    n_person_francesco_de_nardo.is_deceased = false
+
+MERGE (n_person_cezar_tellalli:Person {id: "person_cezar_tellalli"})
+SET n_person_cezar_tellalli.name = "Cezar Tellalli",
+    n_person_cezar_tellalli.role = "Suspect",
+    n_person_cezar_tellalli.gender = "Male",
+    n_person_cezar_tellalli.age = "17",
+    n_person_cezar_tellalli.is_deceased = false
+
+MERGE (n_person_mario_boccassi:Person {id: "person_mario_boccassi"})
+SET n_person_mario_boccassi.name = "Mario Boccassi",
+    n_person_mario_boccassi.role = "Lawyer",
+    n_person_mario_boccassi.gender = "Male",
+    n_person_mario_boccassi.profession = "Lawyer",
+    n_person_mario_boccassi.is_deceased = false
+
+MERGE (n_person_cesare_zaccone:Person {id: "person_cesare_zaccone"})
+SET n_person_cesare_zaccone.name = "Cesare Zaccone",
+    n_person_cesare_zaccone.role = "Lawyer",
+    n_person_cesare_zaccone.gender = "Male",
+    n_person_cesare_zaccone.profession = "Lawyer",
+    n_person_cesare_zaccone.is_deceased = false
+
+MERGE (n_person_vittorio_gatti:Person {id: "person_vittorio_gatti"})
+SET n_person_vittorio_gatti.name = "Vittorio Gatti",
+    n_person_vittorio_gatti.role = "Lawyer",
+    n_person_vittorio_gatti.gender = "Male",
+    n_person_vittorio_gatti.profession = "Lawyer",
+    n_person_vittorio_gatti.is_deceased = false
+
+MERGE (n_person_lorenzo_repetti:Person {id: "person_lorenzo_repetti"})
+SET n_person_lorenzo_repetti.name = "Lorenzo Repetti",
+    n_person_lorenzo_repetti.role = "Lawyer",
+    n_person_lorenzo_repetti.gender = "Male",
+    n_person_lorenzo_repetti.profession = "Lawyer",
+    n_person_lorenzo_repetti.is_deceased = false
+
+MERGE (n_person_livia_locci:Person {id: "person_livia_locci"})
+SET n_person_livia_locci.name = "Livia Locci",
+    n_person_livia_locci.role = "Prosecutor",
+    n_person_livia_locci.gender = "Female",
+    n_person_livia_locci.profession = "Public Prosecutor",
+    n_person_livia_locci.is_deceased = false
+
+MERGE (n_person_graziana_calcagno:Person {id: "person_graziana_calcagno"})
+SET n_person_graziana_calcagno.name = "Graziana Calcagno",
+    n_person_graziana_calcagno.role = "Judge",
+    n_person_graziana_calcagno.gender = "Female",
+    n_person_graziana_calcagno.profession = "Magistrate",
+    n_person_graziana_calcagno.is_deceased = false
+
+MERGE (n_person_mario_gugole:Person {id: "person_mario_gugole"})
+SET n_person_mario_gugole.name = "Mario Gugole",
+    n_person_mario_gugole.role = "Witness",
+    n_person_mario_gugole.gender = "Male",
+    n_person_mario_gugole.profession = "Musician",
+    n_person_mario_gugole.date_of_death = "2008-10",
+    n_person_mario_gugole.is_deceased = true
+
+MERGE (n_person_antonio_mazzi:Person {id: "person_antonio_mazzi"})
+SET n_person_antonio_mazzi.name = "Antonio Mazzi",
+    n_person_antonio_mazzi.role = "Witness",
+    n_person_antonio_mazzi.gender = "Male",
+    n_person_antonio_mazzi.profession = "Priest",
+    n_person_antonio_mazzi.is_deceased = false
+
+MERGE (n_location_novi_ligure:Location {id: "location_novi_ligure"})
+SET n_location_novi_ligure.name = "Novi Ligure"
+
+MERGE (n_location_alessandria:Location {id: "location_alessandria"})
+SET n_location_alessandria.name = "Alessandria"
+
+MERGE (n_location_via_don_beniamino_dacatra_12:Location {id: "location_via_don_beniamino_dacatra_12"})
+SET n_location_via_don_beniamino_dacatra_12.name = "via don Beniamino Dacatra, 12"
+
+MERGE (n_location_torino:Location {id: "location_torino"})
+SET n_location_torino.name = "Torino"
+
+MERGE (n_location_milano:Location {id: "location_milano"})
+SET n_location_milano.name = "Milano"
+
+MERGE (n_location_toscana:Location {id: "location_toscana"})
+SET n_location_toscana.name = "Toscana"
+
+MERGE (n_location_lonato:Location {id: "location_lonato"})
+SET n_location_lonato.name = "Lonato"
+
+MERGE (n_location_rieti:Location {id: "location_rieti"})
+SET n_location_rieti.name = "Rieti"
+
+MERGE (n_weapon_kitchen_knives:Weapon {id: "weapon_kitchen_knives"})
+SET n_weapon_kitchen_knives.name = "kitchen knives"
+
+MERGE (n_evidence_blood:Evidence {id: "evidence_blood"})
+SET n_evidence_blood.name = "blood traces"
+
+MERGE (n_evidence_gloves:Evidence {id: "evidence_gloves"})
+SET n_evidence_gloves.name = "gloves"
+
+MERGE (n_evidence_footprints:Evidence {id: "evidence_footprints"})
+SET n_evidence_footprints.name = "bloody footprints"
+
+MERGE (n_evidence_rat_poison:Evidence {id: "evidence_rat_poison"})
+SET n_evidence_rat_poison.name = "rat poison powder"
+
+MERGE (n_statement_erika_robbery:Statement {id: "statement_erika_robbery"})
+SET n_statement_erika_robbery.name = "Two Albanian burglars committed a robbery and murder"
+
+MERGE (n_statement_omar_bite:Statement {id: "statement_omar_bite"})
+SET n_statement_omar_bite.name = "Omar's hand injury was caused by a bite from Gianluca"
+
+MERGE (n_motive_school_performance:Motive {id: "motive_school_performance"})
+SET n_motive_school_performance.name = "School performance conflicts and family friction"
+
+MERGE (n_charge_voluntary_manslaughter:Charge {id: "charge_voluntary_manslaughter"})
+SET n_charge_voluntary_manslaughter.name = "Duplice omicidio premeditato"
+
+MATCH (s {id: "person_erika_de_nardo"}), (t {id: "case_delitto_di_novi_ligure"}) MERGE (s)-[:COMMITTED]->(t)
+MATCH (s {id: "person_mauro_favaro"}), (t {id: "case_delitto_di_novi_ligure"}) MERGE (s)-[:COMMITTED]->(t)
+MATCH (s {id: "person_susanna_cassini"}), (t {id: "case_delitto_di_novi_ligure"}) MERGE (s)-[:IS_VICTIM_OF]->(t)
+MATCH (s {id: "person_gianluca_de_nardo"}), (t {id: "case_delitto_di_novi_ligure"}) MERGE (s)-[:IS_VICTIM_OF]->(t)
+MATCH (s {id: "person_cezar_tellalli"}), (t {id: "case_delitto_di_novi_ligure"}) MERGE (s)-[:IS_SUSPECTED_IN]->(t)
+MATCH (s {id: "person_livia_locci"}), (t {id: "case_delitto_di_novi_ligure"}) MERGE (s)-[:INVESTIGATES]->(t)
+MATCH (s {id: "person_graziana_calcagno"}), (t {id: "case_delitto_di_novi_ligure"}) MERGE (s)-[:INVESTIGATES]->(t)
+MATCH (s {id: "person_mario_boccassi"}), (t {id: "person_erika_de_nardo"}) MERGE (s)-[:DEFENDS]->(t)
+MATCH (s {id: "person_cesare_zaccone"}), (t {id: "person_erika_de_nardo"}) MERGE (s)-[:DEFENDS]->(t)
+MATCH (s {id: "person_vittorio_gatti"}), (t {id: "person_mauro_favaro"}) MERGE (s)-[:DEFENDS]->(t)
+MATCH (s {id: "person_lorenzo_repetti"}), (t {id: "person_mauro_favaro"}) MERGE (s)-[:DEFENDS]->(t)
+MATCH (s {id: "case_delitto_di_novi_ligure"}), (t {id: "location_novi_ligure"}) MERGE (s)-[:OCCURRED_AT]->(t)
+MATCH (s {id: "location_novi_ligure"}), (t {id: "location_alessandria"}) MERGE (s)-[:WITHIN]->(t)
+MATCH (s {id: "location_via_don_beniamino_dacatra_12"}), (t {id: "location_novi_ligure"}) MERGE (s)-[:WITHIN]->(t)
+MATCH (s {id: "weapon_kitchen_knives"}), (t {id: "case_delitto_di_novi_ligure"}) MERGE (s)-[:USED_IN]->(t)
+MATCH (s {id: "weapon_kitchen_knives"}), (t {id: "location_via_don_beniamino_dacatra_12"}) MERGE (s)-[:FOUND_AT]->(t)
+MATCH (s {id: "evidence_blood"}), (t {id: "location_via_don_beniamino_dacatra_12"}) MERGE (s)-[:FOUND_AT]->(t)
+MATCH (s {id: "evidence_gloves"}), (t {id: "location_via_don_beniamino_dacatra_12"}) MERGE (s)-[:FOUND_AT]->(t)
+MATCH (s {id: "evidence_footprints"}), (t {id: "location_via_don_beniamino_dacatra_12"}) MERGE (s)-[:FOUND_AT]->(t)
+MATCH (s {id: "evidence_rat_poison"}), (t {id: "location_via_don_beniamino_dacatra_12"}) MERGE (s)-[:FOUND_AT]->(t)
+MATCH (s {id: "case_delitto_di_novi_ligure"}), (t {id: "motive_school_performance"}) MERGE (s)-[:HAS_MOTIVE]->(t)
+MATCH (s {id: "person_erika_de_nardo"}), (t {id: "evidence_blood"}) MERGE (s)-[:LEFT_EVIDENCE]->(t)
+MATCH (s {id: "person_mauro_favaro"}), (t {id: "evidence_blood"}) MERGE (s)-[:LEFT_EVIDENCE]->(t)
+MATCH (s {id: "person_erika_de_nardo"}), (t {id: "location_via_don_beniamino_dacatra_12"}) MERGE (s)-[:LOCATED_IN]->(t)
+MATCH (s {id: "person_mauro_favaro"}), (t {id: "location_via_don_beniamino_dacatra_12"}) MERGE (s)-[:LOCATED_IN]->(t)
+MATCH (s {id: "person_erika_de_nardo"}), (t {id: "statement_erika_robbery"}) MERGE (s)-[:MADE_STATEMENT]->(t)
+MATCH (s {id: "person_mauro_favaro"}), (t {id: "statement_omar_bite"}) MERGE (s)-[:MADE_STATEMENT]->(t)
+MATCH (s {id: "statement_erika_robbery"}), (t {id: "case_delitto_di_novi_ligure"}) MERGE (s)-[:RELATES_TO]->(t)
+MATCH (s {id: "statement_omar_bite"}), (t {id: "case_delitto_di_novi_ligure"}) MERGE (s)-[:RELATES_TO]->(t)
+MATCH (s {id: "person_erika_de_nardo"}), (t {id: "charge_voluntary_manslaughter"}) MERGE (s)-[:CHARGED_WITH]->(t)
+MATCH (s {id: "person_mauro_favaro"}), (t {id: "charge_voluntary_manslaughter"}) MERGE (s)-[:CHARGED_WITH]->(t)
+MATCH (s {id: "case_delitto_di_novi_ligure"}), (t {id: "charge_voluntary_manslaughter"}) MERGE (s)-[:INCLUDES_CHARGE]->(t)
+MATCH (s {id: "person_erika_de_nardo"}), (t {id: "weapon_kitchen_knives"}) MERGE (s)-[:OWNS_WEAPON]->(t)
+MATCH (s {id: "person_susanna_cassini"}), (t {id: "weapon_kitchen_knives"}) MERGE (s)-[:OWNS_WEAPON]->(t)
+MATCH (s {id: "person_francesco_de_nardo"}), (t {id: "case_delitto_di_novi_ligure"}) MERGE (s)-[:INVOLVED_IN]->(t)
+MATCH (s {id: "person_mario_gugole"}), (t {id: "case_delitto_di_novi_ligure"}) MERGE (s)-[:INVOLVED_IN]->(t)
+MATCH (s {id: "person_antonio_mazzi"}), (t {id: "case_delitto_di_novi_ligure"}) MERGE (s)-[:INVOLVED_IN]->(t)
+MATCH (s {id: "location_torino"}), (t {id: "location_alessandria"}) MERGE (s)-[:WITHIN]->(t)
+MATCH (s {id: "location_milano"}), (t {id: "location_lonato"}) MERGE (s)-[:WITHIN]->(t)
+MATCH (s {id: "location_rieti"}), (t {id: "location_lazio"}) MERGE (s)-[:WITHIN]->(t)
+
+
+--- NUOVO CASO LLM PURO (ZERO-SHOT) ---
+
+MERGE (n0:Case {id: "case_omicidio_di_alberto_brasili"})
+SET n0.name = "Omicidio di Alberto Brasili"
+
+MERGE (n1:Person {id: "person_alberto_brasili"})
+SET n1.name = "Alberto Brasili", n1.role = "Victim", n1.gender = "Male", n1.profession = "commesso", n1.is_deceased = true
+
+MERGE (n2:Person {id: "person_lucia_corna"})
+SET n2.name = "Lucia Corna", n2.role = "Witness", n2.gender = "Female", n2.is_deceased = false
+
+MERGE (n3:Person {id: "person_antonio_bega"})
+SET n3.name = "Antonio Bega", n3.role = "Suspect", n3.gender = "Male", n3.is_deceased = false
+
+MERGE (n4:Person {id: "person_pietro_croce"})
+SET n4.name = "Pietro Croce", n4.role = "Suspect", n4.gender = "Male", n4.is_deceased = false
+
+MERGE (n5:Person {id: "person_giorgio_nicolosi"})
+SET n5.name = "Giorgio Nicolosi", n5.role = "Suspect", n5.gender = "Male", n5.is_deceased = false
+
+MERGE (n6:Person {id: "person_enrico_caruso"})
+SET n6.name = "Enrico Caruso", n6.role = "Suspect", n6.gender = "Male", n6.is_deceased = false
+
+MERGE (n7:Person {id: "person_giovanni_sciavicco"})
+SET n7.name = "Giovanni Sciavicco", n7.role = "Suspect", n7.gender = "Male", n7.is_deceased = false
+
+MERGE (n8:Location {id: "location_milano"})
+SET n8.name = "Milano"
+
+MERGE (n9:Location {id: "location_via_mascagni"})
+SET n9.name = "via Mascagni"
+
+MERGE (n10:Location {id: "location_piazza_san_babila"})
+SET n10.name = "piazza San Babila"
+
+MERGE (n11:Location {id: "location_ospedale_fatebenefratelli"})
+SET n11.name = "ospedale Fatebenefratelli"
+
+WITH *
+MATCH (s1:Person {id: "person_alberto_brasili"}), (t1:Case {id: "case_omicidio_di_alberto_brasili"})
+MERGE (s1)-[:IS_VICTIM_OF]->(t1)
+
+WITH *
+MATCH (s2:Person {id: "person_lucia_corna"}), (t2:Case {id: "case_omicidio_di_alberto_brasili"})
+MERGE (s2)-[:INVOLVED_IN]->(t2)
+
+WITH *
+MATCH (s3:Person {id: "person_antonio_bega"}), (t3:Case {id: "case_omicidio_di_alberto_brasili"})
+MERGE (s3)-[:COMMITTED]->(t3)
+
+WITH *
+MATCH (s4:Person {id: "person_pietro_croce"}), (t4:Case {id: "case_omicidio_di_alberto_brasili"})
+MERGE (s4)-[:COMMITTED]->(t4)
+
+WITH *
+MATCH (s5:Person {id: "person_giorgio_nicolosi"}), (t5:Case {id: "case_omicidio_di_alberto_brasili"})
+MERGE (s5)-[:COMMITTED]->(t5)
+
+WITH *
+MATCH (s6:Person {id: "person_enrico_caruso"}), (t6:Case {id: "case_omicidio_di_alberto_brasili"})
+MERGE (s6)-[:COMMITTED]->(t6)
+
+WITH *
+MATCH (s7:Person {id: "person_giovanni_sciavicco"}), (t7:Case {id: "case_omicidio_di_alberto_brasili"})
+MERGE (s7)-[:COMMITTED]->(t7)
+
+WITH *
+MATCH (s8:Case {id: "case_omicidio_di_alberto_brasili"}), (t8:Location {id: "location_milano"})
+MERGE (s8)-[:OCCURRED_AT]->(t8)
+
+WITH *
+MATCH (s9:Location {id: "location_via_mascagni"}), (t9:Location {id: "location_milano"})
+MERGE (s9)-[:WITHIN]->(t9)
+
+WITH *
+MATCH (s10:Location {id: "location_piazza_san_babila"}), (t10:Location {id: "location_milano"})
+MERGE (s10)-[:WITHIN]->(t10)
+
+WITH *
+MATCH (s11:Location {id: "location_ospedale_fatebenefratelli"}), (t11:Location {id: "location_milano"})
+MERGE (s11)-[:WITHIN]->(t11)
+
+
+--- NUOVO CASO LLM PURO (ZERO-SHOT) ---
+
+MERGE (n0:Case {id: "case_omicidio_di_giulia_cecchettin"})
+SET n0.name = "Omicidio di Giulia Cecchettin"
+
+MERGE (n1:Person {id: "person_giulia_cecchettin"})
+SET n1.name = "Giulia Cecchettin",
+    n1.role = "Victim",
+    n1.gender = "Female",
+    n1.age = "22",
+    n1.profession = "studentessa",
+    n1.date_of_birth = "5 maggio 2001",
+    n1.date_of_death = "11 novembre 2023",
+    n1.is_deceased = true
+
+MERGE (n2:Person {id: "person_filippo_turetta"})
+SET n2.name = "Filippo Turetta",
+    n2.role = "Suspect",
+    n2.gender = "Male",
+    n2.date_of_birth = "18 dicembre 2001",
+    n2.is_deceased = false
+
+MERGE (n3:Person {id: "person_gino_cecchettin"})
+SET n3.name = "Gino Cecchettin",
+    n3.role = "Relative",
+    n3.gender = "Male",
+    n3.profession = "ingegnere",
+    n3.date_of_birth = "3 settembre 1968",
+    n3.is_deceased = false
+
+MERGE (n4:Person {id: "person_elena_cecchettin"})
+SET n4.name = "Elena Cecchettin",
+    n4.role = "Relative",
+    n4.gender = "Female",
+    n4.date_of_birth = "4 luglio 1999",
+    n4.is_deceased = false
+
+MERGE (n5:Person {id: "person_davide_cecchettin"})
+SET n5.name = "Davide Cecchettin",
+    n5.role = "Relative",
+    n5.gender = "Male",
+    n5.date_of_birth = "10 maggio 2006",
+    n5.is_deceased = false
+
+MERGE (n6:Person {id: "person_monica_camerotto"})
+SET n6.name = "Monica Camerotto",
+    n6.role = "Relative",
+    n6.gender = "Female",
+    n6.date_of_birth = "5 agosto 1971",
+    n6.date_of_death = "20 ottobre 2022",
+    n6.is_deceased = true
+
+MERGE (n7:Person {id: "person_stefano_tigani"})
+SET n7.name = "Stefano Tigani",
+    n7.role = "Lawyer",
+    n7.gender = "Male",
+    n7.profession = "avvocato",
+    n7.is_deceased = false
+
+MERGE (n8:Person {id: "person_bruno_cherchi"})
+SET n8.name = "Bruno Cherchi",
+    n8.role = "Prosecutor",
+    n8.gender = "Male",
+    n8.profession = "procuratore",
+    n8.is_deceased = false
+
+MERGE (n9:Person {id: "person_andrea_petroni"})
+SET n9.name = "Andrea Petroni",
+    n9.role = "Prosecutor",
+    n9.gender = "Male",
+    n9.profession = "pubblico ministero",
+    n9.is_deceased = false
+
+MERGE (n10:Person {id: "person_giovanni_caruso"})
+SET n10.name = "Giovanni Caruso",
+    n10.role = "Lawyer",
+    n10.gender = "Male",
+    n10.profession = "avvocato difensore",
+    n10.is_deceased = false
+
+MERGE (n11:Person {id: "person_luca_zaia"})
+SET n11.name = "Luca Zaia",
+    n11.role = "Authority",
+    n11.gender = "Male",
+    n11.profession = "presidente della regione Veneto",
+    n11.is_deceased = false
+
+MERGE (n12:Person {id: "person_giuseppe_valditara"})
+SET n12.name = "Giuseppe Valditara",
+    n12.role = "Authority",
+    n12.gender = "Male",
+    n12.profession = "ministro dell'istruzione",
+    n12.is_deceased = false
+
+MERGE (n13:Person {id: "person_roberta_metsola"})
+SET n13.name = "Roberta Metsola",
+    n13.role = "Authority",
+    n13.gender = "Female",
+    n13.profession = "Presidente del Parlamento europeo",
+    n13.is_deceased = false
+
+MERGE (n14:Person {id: "person_anna_maria_bernini"})
+SET n14.name = "Anna Maria Bernini",
+    n14.role = "Authority",
+    n14.gender = "Female",
+    n14.profession = "Ministra dell'università e della ricerca",
+    n14.is_deceased = false
+
+MERGE (n15:Person {id: "person_ursula_von_der_leyen"})
+SET n15.name = "Ursula von der Leyen",
+    n15.role = "Authority",
+    n15.gender = "Female",
+    n15.profession = "Presidente della Commissione europea",
+    n15.is_deceased = false
+
+MERGE (n16:Person {id: "person_claudio_cipolla"})
+SET n16.name = "Claudio Cipolla",
+    n16.role = "Authority",
+    n16.gender = "Male",
+    n16.profession = "vescovo",
+    n16.is_deceased = false
+
+MERGE (n17:Person {id: "person_carlo_nordio"})
+SET n17.name = "Carlo Nordio",
+    n17.role = "Authority",
+    n17.gender = "Male",
+    n17.profession = "ministro della giustizia",
+    n17.is_deceased = false
+
+MERGE (n18:Person {id: "person_eugenia_maria_roccella"})
+SET n18.name = "Eugenia Maria Roccella",
+    n18.role = "Authority",
+    n18.gender = "Female",
+    n18.profession = "Ministra per le pari opportunità e per le politiche per la famiglia",
+    n18.is_deceased = false
+
+MERGE (n19:Person {id: "person_laura_boldrini"})
+SET n19.name = "Laura Boldrini",
+    n19.role = "Authority",
+    n19.gender = "Female",
+    n19.profession = "politica",
+    n19.is_deceased = false
+
+MERGE (n20:Location {id: "location_fosso"})
+SET n20.name = "Fossò"
+
+MERGE (n21:Location {id: "location_venezia"})
+SET n21.name = "Venezia"
+
+MERGE (n22:Location {id: "location_padova"})
+SET n22.name = "Padova"
+
+MERGE (n23:Location {id: "location_vigonovo"})
+SET n23.name = "Vigonovo"
+
+MERGE (n24:Location {id: "location_germania"})
+SET n24.name = "Germania"
+
+MERGE (n25:Location {id: "location_verona"})
+SET n25.name = "Verona"
+
+MERGE (n26:Weapon {id: "weapon_coltello"})
+SET n26.name = "lama di un coltello lunga 21 cm"
+
+MERGE (n27:Evidence {id: "evidence_sangue"})
+SET n27.name = "notevoli quantità di sangue"
+
+MERGE (n28:Charge {id: "charge_omicidio_volontario"})
+SET n28.name = "omicidio volontario"
+
+MERGE (n29:Charge {id: "charge_sequestro_di_persona"})
+SET n29.name = "sequestro di persona"
+
+MERGE (n30:Charge {id: "charge_occultamento_di_cadavere"})
+SET n30.name = "occultamento di cadavere"
+
+MERGE (n31:Charge {id: "charge_premeditazione"})
+SET n31.name = "premeditazione"
+
+MERGE (n32:Charge {id: "charge_crudelta"})
+SET n32.name = "crudeltà"
+
+MERGE (n33:Charge {id: "charge_stalking"})
+SET n33.name = "stalking"
+
+WITH *
+
+MATCH (s {id: "person_filippo_turetta"}), (t {id: "case_omicidio_di_giulia_cecchettin"}) MERGE (s)-[:COMMITTED]->(t)
+MATCH (s {id: "person_giulia_cecchettin"}), (t {id: "case_omicidio_di_giulia_cecchettin"}) MERGE (s)-[:IS_VICTIM_OF]->(t)
+MATCH (s {id: "case_omicidio_di_giulia_cecchettin"}), (t {id: "location_fosso"}) MERGE (s)-[:OCCURRED_AT]->(t)
+MATCH (s {id: "location_fosso"}), (t {id: "location_venezia"}) MERGE (s)-[:WITHIN]->(t)
+MATCH (s {id: "weapon_coltello"}), (t {id: "case_omicidio_di_giulia_cecchettin"}) MERGE (s)-[:USED_IN]->(t)
+MATCH (s {id: "weapon_coltello"}), (t {id: "location_fosso"}) MERGE (s)-[:FOUND_AT]->(t)
+MATCH (s {id: "evidence_sangue"}), (t {id: "location_fosso"}) MERGE (s)-[:FOUND_AT]->(t)
+MATCH (s {id: "person_stefano_tigani"}), (t {id: "person_gino_cecchettin"}) MERGE (s)-[:DEFENDS]->(t)
+MATCH (s {id: "person_stefano_tigani"}), (t {id: "person_elena_cecchettin"}) MERGE (s)-[:DEFENDS]->(t)
+MATCH (s {id: "person_stefano_tigani"}), (t {id: "person_davide_cecchettin"}) MERGE (s)-[:DEFENDS]->(t)
+MATCH (s {id: "person_bruno_cherchi"}), (t {id: "case_omicidio_di_giulia_cecchettin"}) MERGE (s)-[:INVESTIGATES]->(t)
+MATCH (s {id: "person_andrea_petroni"}), (t {id: "case_omicidio_di_giulia_cecchettin"}) MERGE (s)-[:INVESTIGATES]->(t)
+MATCH (s {id: "person_giovanni_caruso"}), (t {id: "person_filippo_turetta"}) MERGE (s)-[:DEFENDS]->(t)
+MATCH (s {id: "person_gino_cecchettin"}), (t {id: "case_omicidio_di_giulia_cecchettin"}) MERGE (s)-[:INVOLVED_IN]->(t)
+MATCH (s {id: "person_elena_cecchettin"}), (t {id: "case_omicidio_di_giulia_cecchettin"}) MERGE (s)-[:INVOLVED_IN]->(t)
+MATCH (s {id: "person_davide_cecchettin"}), (t {id: "case_omicidio_di_giulia_cecchettin"}) MERGE (s)-[:INVOLVED_IN]->(t)
+MATCH (s {id: "case_omicidio_di_giulia_cecchettin"}), (t {id: "charge_omicidio_volontario"}) MERGE (s)-[:INCLUDES_CHARGE]->(t)
+MATCH (s {id: "case_omicidio_di_giulia_cecchettin"}), (t {id: "charge_sequestro_di_persona"}) MERGE (s)-[:INCLUDES_CHARGE]->(t)
+MATCH (s {id: "case_omicidio_di_giulia_cecchettin"}), (t {id: "charge_occultamento_di_cadavere"}) MERGE (s)-[:INCLUDES_CHARGE]->(t)
+MATCH (s {id: "case_omicidio_di_giulia_cecchettin"}), (t {id: "charge_premeditazione"}) MERGE (s)-[:INCLUDES_CHARGE]->(t)
+MATCH (s {id: "case_omicidio_di_giulia_cecchettin"}), (t {id: "charge_crudelta"}) MERGE (s)-[:INCLUDES_CHARGE]->(t)
+MATCH (s {id: "case_omicidio_di_giulia_cecchettin"}), (t {id: "charge_stalking"}) MERGE (s)-[:INCLUDES_CHARGE]->(t)
+MATCH (s {id: "person_filippo_turetta"}), (t {id: "charge_omicidio_volontario"}) MERGE (s)-[:CHARGED_WITH]->(t)
+MATCH (s {id: "person_filippo_turetta"}), (t {id: "charge_sequestro_di_persona"}) MERGE (s)-[:CHARGED_WITH]->(t)
+MATCH (s {id: "person_filippo_turetta"}), (t {id: "charge_occultamento_di_cadavere"}) MERGE (s)-[:CHARGED_WITH]->(t)
+MATCH (s {id: "person_filippo_turetta"}), (t {id: "charge_premeditazione"}) MERGE (s)-[:CHARGED_WITH]->(t)
+MATCH (s {id: "person_filippo_turetta"}), (t {id: "charge_crudelta"}) MERGE (s)-[:CHARGED_WITH]->(t)
+MATCH (s {id: "person_filippo_turetta"}), (t {id: "charge_stalking"}) MERGE (s)-[:CHARGED_WITH]->(t)
+
+
+--- NUOVO CASO LLM PURO (ZERO-SHOT) ---
+
+// Creazione dei Nodi
+MERGE (n0:Case {id: "case_omicidio_marco_vannini"})
+SET n0.name = "Omicidio di Marco Vannini"
+
+MERGE (n1:Person {id: "person_marco_vannini"})
+SET n1.name = "Marco Vannini", n1.role = "Victim", n1.gender = "Male", n1.age = "20", n1.is_deceased = true
+
+MERGE (n2:Person {id: "person_antonio_ciontoli"})
+SET n2.name = "Antonio Ciontoli", n2.role = "Suspect", n2.gender = "Male", n2.profession = "sottufficiale della Marina Militare", n2.is_deceased = false
+
+MERGE (n3:Person {id: "person_martina_ciontoli"})
+SET n3.name = "Martina Ciontoli", n3.role = "Suspect", n3.gender = "Female", n3.is_deceased = false
+
+MERGE (n4:Person {id: "person_maria_pezzillo"})
+SET n4.name = "Maria Pezzillo", n4.role = "Suspect", n4.gender = "Female", n4.is_deceased = false
+
+MERGE (n5:Person {id: "person_federico_ciontoli"})
+SET n5.name = "Federico Ciontoli", n5.role = "Suspect", n5.gender = "Male", n5.is_deceased = false
+
+MERGE (n6:Person {id: "person_viola_giorgini"})
+SET n6.name = "Viola Giorgini", n6.role = "Suspect", n6.gender = "Female", n6.is_deceased = false
+
+MERGE (n7:Location {id: "location_ladispoli"})
+SET n7.name = "Ladispoli"
+
+MERGE (n8:Location {id: "location_roma"})
+SET n8.name = "Roma"
+
+MERGE (n9:Location {id: "location_casa_ciontoli"})
+SET n9.name = "abitazione della famiglia Ciontoli"
+
+MERGE (n10:Location {id: "location_ospedale_ladispoli"})
+SET n10.name = "ospedale di Ladispoli"
+
+MERGE (n11:Weapon {id: "weapon_pistola"})
+SET n11.name = "pistola calibro 9 parabellum"
+
+MERGE (n12:Evidence {id: "evidence_bossoli"})
+SET n12.name = "bossoli"
+
+MERGE (n13:Evidence {id: "evidence_tracce_sangue"})
+SET n13.name = "tracce di sangue"
+
+MERGE (n14:Charge {id: "charge_omicidio_volontario"})
+SET n14.name = "omicidio volontario con dolo eventuale"
+
+MERGE (n15:Charge {id: "charge_concorso_omicidio_volontario"})
+SET n15.name = "concorso in omicidio volontario"
+
+MERGE (n16:Charge {id: "charge_concorso_omicidio_colposo"})
+SET n16.name = "concorso in omicidio colposo"
+
+// Creazione delle Relazioni
+MATCH (s:Person {id: "person_antonio_ciontoli"}), (t:Case {id: "case_omicidio_marco_vannini"})
+MERGE (s)-[:COMMITTED]->(t)
+
+MATCH (s:Person {id: "person_marco_vannini"}), (t:Case {id: "case_omicidio_marco_vannini"})
+MERGE (s)-[:IS_VICTIM_OF]->(t)
+
+MATCH (s:Person {id: "person_martina_ciontoli"}), (t:Case {id: "case_omicidio_marco_vannini"})
+MERGE (s)-[:IS_SUSPECTED_IN]->(t)
+
+MATCH (s:Person {id: "person_maria_pezzillo"}), (t:Case {id: "case_omicidio_marco_vannini"})
+MERGE (s)-[:IS_SUSPECTED_IN]->(t)
+
+MATCH (s:Person {id: "person_federico_ciontoli"}), (t:Case {id: "case_omicidio_marco_vannini"})
+MERGE (s)-[:IS_SUSPECTED_IN]->(t)
+
+MATCH (s:Person {id: "person_viola_giorgini"}), (t:Case {id: "case_omicidio_marco_vannini"})
+MERGE (s)-[:IS_SUSPECTED_IN]->(t)
+
+MATCH (s:Case {id: "case_omicidio_marco_vannini"}), (t:Location {id: "location_ladispoli"})
+MERGE (s)-[:OCCURRED_AT]->(t)
+
+MATCH (s:Location {id: "location_ladispoli"}), (t:Location {id: "location_roma"})
+MERGE (s)-[:WITHIN]->(t)
+
+MATCH (s:Location {id: "location_casa_ciontoli"}), (t:Location {id: "location_ladispoli"})
+MERGE (s)-[:WITHIN]->(t)
+
+MATCH (s:Location {id: "location_ospedale_ladispoli"}), (t:Location {id: "location_ladispoli"})
+MERGE (s)-[:WITHIN]->(t)
+
+MATCH (s:Weapon {id: "weapon_pistola"}), (t:Case {id: "case_omicidio_marco_vannini"})
+MERGE (s)-[:USED_IN]->(t)
+
+MATCH (s:Weapon {id: "weapon_pistola"}), (t:Location {id: "location_casa_ciontoli"})
+MERGE (s)-[:FOUND_AT]->(t)
+
+MATCH (s:Evidence {id: "evidence_bossoli"}), (t:Location {id: "location_casa_ciontoli"})
+MERGE (s)-[:FOUND_AT]->(t)
+
+MATCH (s:Evidence {id: "evidence_tracce_sangue"}), (t:Location {id: "location_casa_ciontoli"})
+MERGE (s)-[:FOUND_AT]->(t)
+
+MATCH (s:Person {id: "person_antonio_ciontoli"}), (t:Weapon {id: "weapon_pistola"})
+MERGE (s)-[:OWNS_WEAPON]->(t)
+
+MATCH (s:Person {id: "person_antonio_ciontoli"}), (t:Charge {id: "charge_omicidio_volontario"})
+MERGE (s)-[:CHARGED_WITH]->(t)
+
+MATCH (s:Person {id: "person_martina_ciontoli"}), (t:Charge {id: "charge_concorso_omicidio_volontario"})
+MERGE (s)-[:CHARGED_WITH]->(t)
+
+MATCH (s:Person {id: "person_martina_ciontoli"}), (t:Charge {id: "charge_concorso_omicidio_colposo"})
+MERGE (s)-[:CHARGED_WITH]->(t)
+
+MATCH (s:Person {id: "person_maria_pezzillo"}), (t:Charge {id: "charge_concorso_omicidio_volontario"})
+MERGE (s)-[:CHARGED_WITH]->(t)
+
+MATCH (s:Person {id: "person_maria_pezzillo"}), (t:Charge {id: "charge_concorso_omicidio_colposo"})
+MERGE (s)-[:CHARGED_WITH]->(t)
+
+MATCH (s:Person {id: "person_federico_ciontoli"}), (t:Charge {id: "charge_concorso_omicidio_volontario"})
+MERGE (s)-[:CHARGED_WITH]->(t)
+
+MATCH (s:Person {id: "person_federico_ciontoli"}), (t:Charge {id: "charge_concorso_omicidio_colposo"})
+MERGE (s)-[:CHARGED_WITH]->(t)
+
+MATCH (s:Person {id: "person_viola_giorgini"}), (t:Charge {id: "charge_concorso_omicidio_volontario"})
+MERGE (s)-[:CHARGED_WITH]->(t)
+
+MATCH (s:Person {id: "person_viola_giorgini"}), (t:Charge {id: "charge_concorso_omicidio_colposo"})
+MERGE (s)-[:CHARGED_WITH]->(t)
+
+MATCH (s:Case {id: "case_omicidio_marco_vannini"}), (t:Charge {id: "charge_omicidio_volontario"})
+MERGE (s)-[:INCLUDES_CHARGE]->(t)
+
+MATCH (s:Case {id: "case_omicidio_marco_vannini"}), (t:Charge {id: "charge_concorso_omicidio_volontario"})
+MERGE (s)-[:INCLUDES_CHARGE]->(t)
+
+MATCH (s:Case {id: "case_omicidio_marco_vannini"}), (t:Charge {id: "charge_concorso_omicidio_colposo"})
+MERGE (s)-[:INCLUDES_CHARGE]->(t)
+
+
+--- NUOVO CASO LLM PURO (ZERO-SHOT) ---
+
+MERGE (n0:Case {id: "case_omicidio_marta_russo"})
+SET n0.name = "Omicidio di Marta Russo"
+
+MERGE (n1:Person {id: "person_marta_russo"})
+SET n1.name = "Marta Russo", n1.role = "Victim", n1.gender = "Female", n1.age = "22", n1.profession = "Student", n1.date_of_birth = "1975-04-13", n1.date_of_death = "1997-05-14", n1.is_deceased = true
+
+MERGE (n2:Person {id: "person_giovanni_scattone"})
+SET n2.name = "Giovanni Scattone", n2.role = "Suspect", n2.gender = "Male", n2.age = "29", n2.profession = "University Assistant", n2.is_deceased = false
+
+MERGE (n3:Person {id: "person_salvatore_ferraro"})
+SET n3.name = "Salvatore Ferraro", n3.role = "Suspect", n3.gender = "Male", n3.age = "30", n3.profession = "University Assistant", n3.is_deceased = false
+
+MERGE (n4:Person {id: "person_francesco_liparota"})
+SET n4.name = "Francesco Liparota", n4.role = "Suspect", n4.gender = "Male", n4.age = "35", n4.profession = "Janitor", n4.is_deceased = false
+
+MERGE (n5:Person {id: "person_gabriella_alletto"})
+SET n5.name = "Gabriella Alletto", n5.role = "Witness", n5.gender = "Female", n5.age = "45", n5.profession = "Administrative Employee", n5.is_deceased = false
+
+MERGE (n6:Person {id: "person_jolanda_ricci"})
+SET n6.name = "Jolanda Ricci", n6.role = "Witness", n6.gender = "Female", n6.profession = "Student", n6.is_deceased = false
+
+MERGE (n7:Person {id: "person_maria_chiara_lipari"})
+SET n7.name = "Maria Chiara Lipari", n7.role = "Witness", n7.gender = "Female", n7.profession = "PhD Student", n7.is_deceased = false
+
+MERGE (n8:Person {id: "person_bruno_romano"})
+SET n8.name = "Bruno Romano", n8.role = "Suspect", n8.gender = "Male", n8.profession = "Professor", n8.is_deceased = false
+
+MERGE (n9:Person {id: "person_carmelo_zingale"})
+SET n9.name = "Carmelo Zingale", n9.role = "Suspect", n9.gender = "Male", n9.profession = "Librarian", n9.is_deceased = false
+
+MERGE (n10:Person {id: "person_giulia_bongiorno"})
+SET n10.name = "Giulia Bongiorno", n10.role = "Lawyer", n10.gender = "Female", n10.profession = "Lawyer", n10.is_deceased = false
+
+MERGE (n11:Person {id: "person_franco_coppi"})
+SET n11.name = "Franco Coppi", n11.role = "Lawyer", n11.gender = "Male", n11.profession = "Lawyer", n11.is_deceased = false
+
+MERGE (n12:Person {id: "person_italo_ormanni"})
+SET n12.name = "Italo Ormanni", n12.role = "Prosecutor", n12.gender = "Male", n12.profession = "Prosecutor", n12.is_deceased = false
+
+MERGE (n13:Person {id: "person_carlo_lasperanza"})
+SET n13.name = "Carlo Lasperanza", n13.role = "Prosecutor", n13.gender = "Male", n13.profession = "Prosecutor", n13.is_deceased = false
+
+MERGE (n14:Location {id: "location_citta_universitaria"})
+SET n14.name = "Città Universitaria della Sapienza"
+
+MERGE (n15:Location {id: "location_roma"})
+SET n15.name = "Roma"
+
+MERGE (n16:Location {id: "location_aula_6"})
+SET n16.name = "Aula Assistenti dell'Istituto di filosofia del diritto"
+
+MERGE (n17:Weapon {id: "weapon_pistola_calibro_22"})
+SET n17.name = "Pistola calibro .22"
+
+MERGE (n18:Evidence {id: "evidence_proiettile"})
+SET n18.name = "Proiettile calibro .22"
+
+MERGE (n19:Evidence {id: "evidence_particella_bario_antimonio"})
+SET n19.name = "Particella di ferro-bario-antimonio"
+
+MERGE (n20:Charge {id: "charge_omicidio_colposo"})
+SET n20.name = "Omicidio colposo aggravato"
+
+MERGE (n21:Charge {id: "charge_favoreggiamento"})
+SET n21.name = "Favoreggiamento personale"
+
+MERGE (n22:Motive {id: "motive_nessun_movente"})
+SET n22.name = "Assenza di movente / Futili motivi / Sbaglio accidentale"
+
+MERGE (n23:Statement {id: "statement_alletto_accusa"})
+SET n23.name = "Dichiarazioni di accusa di Gabriella Alletto contro Scattone e Ferraro"
+
+MATCH (s {id: "person_marta_russo"}), (t {id: "case_omicidio_marta_russo"}) MERGE (s)-[:IS_VICTIM_OF]->(t)
+MATCH (s {id: "person_giovanni_scattone"}), (t {id: "case_omicidio_marta_russo"}) MERGE (s)-[:IS_SUSPECTED_IN]->(t)
+MATCH (s {id: "person_salvatore_ferraro"}), (t {id: "case_omicidio_marta_russo"}) MERGE (s)-[:IS_SUSPECTED_IN]->(t)
+MATCH (s {id: "person_italo_ormanni"}), (t {id: "case_omicidio_marta_russo"}) MERGE (s)-[:INVESTIGATES]->(t)
+MATCH (s {id: "person_carlo_lasperanza"}), (t {id: "case_omicidio_marta_russo"}) MERGE (s)-[:INVESTIGATES]->(t)
+MATCH (s {id: "person_bruno_romano"}), (t {id: "person_giulia_bongiorno"}) MERGE (s)-[:DEFENDS]->(t)
+MATCH (s {id: "person_bruno_romano"}), (t {id: "person_franco_coppi"}) MERGE (s)-[:DEFENDS]->(t)
+MATCH (s {id: "case_omicidio_marta_russo"}), (t {id: "location_citta_universitaria"}) MERGE (s)-[:OCCURRED_AT]->(t)
+MATCH (s {id: "location_citta_universitaria"}), (t {id: "location_roma"}) MERGE (s)-[:WITHIN]->(t)
+MATCH (s {id: "location_aula_6"}), (t {id: "location_citta_universitaria"}) MERGE (s)-[:WITHIN]->(t)
+MATCH (s {id: "weapon_pistola_calibro_22"}), (t {id: "case_omicidio_marta_russo"}) MERGE (s)-[:USED_IN]->(t)
+MATCH (s {id: "evidence_proiettile"}), (t {id: "location_citta_universitaria"}) MERGE (s)-[:FOUND_AT]->(t)
+MATCH (s {id: "evidence_particella_bario_antimonio"}), (t {id: "location_aula_6"}) MERGE (s)-[:FOUND_AT]->(t)
+MATCH (s {id: "case_omicidio_marta_russo"}), (t {id: "motive_nessun_movente"}) MERGE (s)-[:HAS_MOTIVE]->(t)
+MATCH (s {id: "person_gabriella_alletto"}), (t {id: "statement_alletto_accusa"}) MERGE (s)-[:MADE_STATEMENT]->(t)
+MATCH (s {id: "statement_alletto_accusa"}), (t {id: "case_omicidio_marta_russo"}) MERGE (s)-[:RELATES_TO]->(t)
+MATCH (s {id: "person_giovanni_scattone"}), (t {id: "charge_omicidio_colposo"}) MERGE (s)-[:CHARGED_WITH]->(t)
+MATCH (s {id: "person_salvatore_ferraro"}), (t {id: "charge_favoreggiamento"}) MERGE (s)-[:CHARGED_WITH]->(t)
+MATCH (s {id: "case_omicidio_marta_russo"}), (t {id: "charge_omicidio_colposo"}) MERGE (s)-[:INCLUDES_CHARGE]->(t)
+MATCH (s {id: "case_omicidio_marta_russo"}), (t {id: "charge_favoreggiamento"}) MERGE (s)-[:INCLUDES_CHARGE]->(t)
+MATCH (s {id: "person_jolanda_ricci"}), (t {id: "case_omicidio_marta_russo"}) MERGE (s)-[:INVOLVED_IN]->(t)
+MATCH (s {id: "person_maria_chiara_lipari"}), (t {id: "case_omicidio_marta_russo"}) MERGE (s)-[:INVOLVED_IN]->(t)
+MATCH (s {id: "person_francesco_liparota"}), (t {id: "case_omicidio_marta_russo"}) MERGE (s)-[:IS_SUSPECTED_IN]->(t)
+MATCH (s {id: "person_bruno_romano"}), (t {id: "case_omicidio_marta_russo"}) MERGE (s)-[:IS_SUSPECTED_IN]->(t)
+MATCH (s {id: "person_carmelo_zingale"}), (t {id: "case_omicidio_marta_russo"}) MERGE (s)-[:IS_SUSPECTED_IN]->(t)
+MATCH (s {id: "person_marta_russo"}), (t {id: "location_citta_universitaria"}) MERGE (s)-[:LOCATED_IN]->(t)
+MATCH (s {id: "person_giovanni_scattone"}), (t {id: "location_aula_6"}) MERGE (s)-[:LOCATED_IN]->(t)
+MATCH (s {id: "person_salvatore_ferraro"}), (t {id: "location_aula_6"}) MERGE (s)-[:LOCATED_IN]->(t)
+

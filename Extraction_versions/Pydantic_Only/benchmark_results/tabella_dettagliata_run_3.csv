@@ -1,0 +1,13 @@
+Caso,Precision,Recall,F1-Score,TP,FP,FN
+delitto_di_cogne (Entità),0.3939,0.7222,0.5098,13,20,5
+delitto_di_cogne (Relazioni),0.2821,0.5789,0.3793,11,28,8
+delitto_di_novi_ligure (Entità),0.5455,0.3871,0.4528,12,10,19
+delitto_di_novi_ligure (Relazioni),0.3077,0.2162,0.254,8,18,29
+omicidio_di_alberto_brasili (Entità),0.8,0.3077,0.4444,12,3,27
+omicidio_di_alberto_brasili (Relazioni),0.375,0.1053,0.1644,6,10,51
+omicidio_di_giulia_cecchettin (Entità),0.4545,0.4167,0.4348,10,12,14
+omicidio_di_giulia_cecchettin (Relazioni),0.44,0.3793,0.4074,11,14,18
+omicidio_di_marco_vannini (Entità),0.64,0.5161,0.5714,16,9,15
+omicidio_di_marco_vannini (Relazioni),0.3571,0.3571,0.3571,15,27,27
+omicidio_di_marta_russo (Entità),0.5517,0.6154,0.5818,16,13,10
+omicidio_di_marta_russo (Relazioni),0.3,0.375,0.3333,9,21,15

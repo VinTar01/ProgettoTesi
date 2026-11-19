@@ -1,0 +1,319 @@
+================================================================================
+ LOG CONFRONTO CYPHER E RISPOSTE - CREW 4
+================================================================================
+
+[EASY_01] Livello: Facile
+DOMANDA NATURALE: Chi è l'imputato o sospettato principale nel caso del Delitto di Garlasco (omicidio di Chiara Poggi)?
+--------------------------------------------------------------------------------
+CYPHER GOLDEN (Ottimale):
+MATCH (p:Person)-[:COMMITTED|IS_SUSPECTED_IN]-(c:Case) WHERE toLower(c.name) CONTAINS 'garlasco' OR toLower(c.name) CONTAINS 'poggi' RETURN p.name AS risultato
+
+RISULTATO ATTESO: ['Alberto Stasi', 'Andrea Sempio']
+--------------------------------------------------------------------------------
+CYPHER GENERATO DALL'AGENTE:
+MATCH (c:Case) WHERE toLower(c.name) CONTAINS 'garlasco' MATCH (p:Person)-[:IS_SUSPECTED_IN|COMMITTED|INVOLVED_IN]-(c) RETURN p.name, p.role
+
+RISPOSTA AGENTE:
+Nel caso del Delitto di Garlasco (omicidio di Chiara Poggi), la persona principale coinvolta come condannato individuata nel database è Alberto Stasi. Andres Sempio è un sospettato.
+
+```cypher
+MATCH (c:Case) WHERE toLower(c.name) CONTAINS 'garlasco' MATCH (p:Person)-[:IS_SUSPECTED_IN|COMMITTED|INVOLVED_IN]-(c) RETURN p.name, p.role
+```
+--------------------------------------------------------------------------------
+ESITO: SUCCESSO (Tempo: 4.0s)
+================================================================================
+
+[EASY_02] Livello: Facile
+DOMANDA NATURALE: Chi è la persona che difende il colpevole della morte di Diana Pifferi?
+--------------------------------------------------------------------------------
+CYPHER GOLDEN (Ottimale):
+MATCH (avvocato:Person)-[:DEFENDS]->(p:Person)-[:COMMITTED]->(c:Case) WHERE toLower(c.name) CONTAINS 'pifferi' RETURN avvocato.name AS nome
+
+RISULTATO ATTESO: ['Alessia Pontenani']
+--------------------------------------------------------------------------------
+CYPHER GENERATO DALL'AGENTE:
+MATCH (p:Person)-[:DEFENDS]-(colpevole:Person) RETURN p.name, colpevole.name
+
+RISPOSTA AGENTE:
+La persona che difende il colpevole (Alessia Pifferi) della morte di Diana Pifferi è Alessia Pontenani.
+
+```cypher
+MATCH (p:Person)-[:DEFENDS]-(colpevole:Person) RETURN p.name, colpevole.name
+```
+--------------------------------------------------------------------------------
+ESITO: SUCCESSO (la query pero trova tutti gli avvocati, la query è geenrica)(Tempo: 2.83s)
+================================================================================
+
+[EASY_03] Livello: Facile
+DOMANDA NATURALE: In quale città o luogo specifico è avvenuto l'omicidio di Luigi Marangoni?
+--------------------------------------------------------------------------------
+CYPHER GOLDEN (Ottimale):
+MATCH (c:Case)-[:OCCURRED_AT]-(l:Location) WHERE toLower(c.name) CONTAINS 'marangoni' RETURN l.name AS comune
+
+RISULTATO ATTESO: ['Milano']
+--------------------------------------------------------------------------------
+CYPHER GENERATO DALL'AGENTE:
+MATCH (p:Person)-[:IS_VICTIM_OF]-(c:Case) WHERE toLower(p.name) CONTAINS 'luigi marangoni' MATCH (c)-[:OCCURRED_AT]-(l:Location) RETURN p.name, c.name, l.name
+
+RISPOSTA AGENTE:
+L'omicidio di Luigi Marangoni è avvenuto a Milano.
+
+```cypher
+MATCH (p:Person)-[:IS_VICTIM_OF]-(c:Case) WHERE toLower(p.name) CONTAINS 'luigi marangoni' MATCH (c)-[:OCCURRED_AT]-(l:Location) RETURN p.name, c.name, l.name
+```
+--------------------------------------------------------------------------------
+ESITO: SUPERATO (Tempo: 1.78s)
+================================================================================
+
+[EASY_04] Livello: Facile
+DOMANDA NATURALE: In quale città o luogo specifico è avvenuto l'omicidio di Stefano Cecchetti?
+--------------------------------------------------------------------------------
+CYPHER GOLDEN (Ottimale):
+MATCH (c:Case) WHERE toLower(c.name) CONTAINS 'cecchetti' OPTIONAL MATCH (c)-[:OCCURRED_AT]-(l:Location) RETURN coalesce(l.name, c.locationLabel, c.location_label) AS luogo
+
+RISULTATO ATTESO: ['Roma']
+--------------------------------------------------------------------------------
+CYPHER GENERATO DALL'AGENTE:
+MATCH (p:Person)-[:IS_VICTIM_OF]-(c:Case) WHERE toLower(p.name) CONTAINS 'stefano cecchetti' RETURN p.name, c.name, c.location_label, c.locationLabel
+
+RISPOSTA AGENTE
+L'omicidio di Stefano Cecchetti è avvenuto a Roma.
+
+```cypher
+MATCH (p:Person)-[:IS_VICTIM_OF]-(c:Case) WHERE toLower(p.name) CONTAINS 'stefano cecchetti' RETURN p.name, c.name, c.location_label, c.locationLabel
+```
+--------------------------------------------------------------------------------
+ESITO: FALLITO (Tempo: 3.04s)
+================================================================================
+
+[MEDIUM_01] Livello: Medio
+DOMANDA NATURALE: Quali casi di omicidio nel database vedono l'impiego di una pistola o di un coltello?
+--------------------------------------------------------------------------------
+CYPHER GOLDEN (Ottimale):
+MATCH (w:Weapon)-[:USED_IN]-(c:Case) WHERE toLower(w.name) CONTAINS 'beretta' OR toLower(w.name) CONTAINS 'coltello' OR toLower(w.name) CONTAINS 'pistola' RETURN c.name AS caso, w.name AS arma
+
+RISULTATO ATTESO: ['Omicidio di Alberto Giaquinto', 'Omicidio di Erio Codecà', 'Omicidio di Francesco di Cataldo', 'Omicidio di Francesco Evangelista', 'Omicidio di Gaetano Amoroso', 'Omicidio di Giuseppe Furci', 'Omicidio di Lorenz0 Cutugno', 'Omicidio di Monica Calò', 'Omicidio di Valerio Renzi', 'Strage di Chilivanti', 'Strage di via Caravaggio']
+--------------------------------------------------------------------------------
+CYPHER GENERATO DALL'AGENTE:
+MATCH (c:Case)-[:USED_IN]-(w:Weapon) WHERE toLower(w.name) CONTAINS 'pistola' OR toLower(w.name) CONTAINS 'coltello' RETURN DISTINCT c.name AS case_name, w.name AS weapon_name
+
+RISPOSTA AGENTE:
+Dall'analisi del database, sono stati individuati diversi casi di omicidio in cui viene impiegata una pistola o un coltello. 
+
+Ecco l'elenco dettagliato dei casi e delle relative armi utilizzate:
+
+- **Omicidio di Alberto Giaquinto**: Pistola
+- **Omicidio di Erio Codecà**: Pistola
+- **Omicidio di Francesco Di Cataldo**: Pistola
+- **Omicidio di Gaetano Amoroso**: Coltello
+- **Omicidio di Giuseppe Furci**: Pistola
+- **Omicidio di Lorenzo Cutugno**: Pistola
+- **Omicidio di Monica Calò**: Coltello
+- **Omicidio di Valerio Renzi**: Pistola
+- **Strage di Chilivani**: Pistola
+- **Strage di via Caravaggio**: Pistola e coltello da cucina
+
+```cypher
+MATCH (c:Case)-[:USED_IN]-(w:Weapon) WHERE toLower(w.name) CONTAINS 'pistola' OR toLower(w.name) CONTAINS 'coltello' RETURN DISTINCT c.name AS case_name, w.name AS weapon_name
+```
+--------------------------------------------------------------------------------
+ESITO: SUCCESSO - trovati 10 (Tempo: 5.14s)
+================================================================================
+
+[MEDIUM_02] Livello: Medio
+DOMANDA NATURALE: Elenca tutti i casi di cronaca avvenuti specificamente nella città di Milano o di Torino.
+--------------------------------------------------------------------------------
+CYPHER GOLDEN (Ottimale):
+MATCH (c:Case)-[:OCCURRED_AT]-(l:Location) WHERE toLower(l.name) CONTAINS 'milano' OR toLower(l.name) CONTAINS 'torino' RETURN c.name AS caso, l.name AS comune
+
+RISULTATO ATTESO: ['Omicidio di Erio Codecà', 'Omicidio di Francesco Di Cataldo', 'Omicidio di Gaetano Amoroso', 'Omicidio di Lorenzo Cutugno', 'Omicidio di Luigi Marangoni', 'Omicidio di Saverio Saltarelli']
+--------------------------------------------------------------------------------
+CYPHER GENERATO DALL'AGENTE:
+MATCH (c:Case)-[:OCCURRED_AT]-(l:Location) 
+WHERE toLower(l.name) CONTAINS 'milano' OR toLower(l.name) CONTAINS 'torino' 
+RETURN c.name AS case_name, c.date AS case_date, l.name AS location_name
+
+RISPOSTA AGENTE:
+Basandosi sui dati presenti nel database, i casi di cronaca avvenuti specificamente nelle città di Milano o di Torino (tramite la relazione di localizzazione) sono:
+
+1. **Omicidio di Erio Codecà** (Torino)
+2. **Omicidio di Francesco Di Cataldo** (Milano)
+3. **Omicidio di Gaetano Amoroso** (Milano)
+4. **Omicidio di Lorenzo Cutugno** (Torino)
+5. **Omicidio di Luigi Marangoni** (Milano)
+6. **Omicidio di Saverio Saltarelli** (Milano)
+
+```cypher
+MATCH (c:Case)-[:OCCURRED_AT]-(l:Location) 
+WHERE toLower(l.name) CONTAINS 'milano' OR toLower(l.name) CONTAINS 'torino' 
+RETURN c.name AS case_name, c.date AS case_date, l.name AS location_name
+```
+--------------------------------------------------------------------------------
+ESITO: SUPERATO - trovati 6 (Tempo: 2.7s)
+================================================================================
+
+[MEDIUM_03] Livello: Medio
+DOMANDA NATURALE: Estrai le persone registrate nel database per cui è esplicitamente indicato il ruolo o la professione e il relativo caso associato.
+--------------------------------------------------------------------------------
+CYPHER GOLDEN (Ottimale):
+MATCH (p:Person)-[:IS_SUSPECTED_IN|COMMITTED|INVOLVED_IN|IS_VICTIM_OF]-(c:Case) WHERE p.role IS NOT NULL OR p.profession IS NOT NULL RETURN p.name AS persona, coalesce(p.role, p.profession) AS dettaglio, c.name AS caso
+
+RISULTATO ATTESO: ['Amedeo Matacena', 'Giuseppe Scaramella', 'Vittorio Emanuele di Savoia', 'Giancarlo Elia Valori', 'Mariano Rumor', 'Giulio Andreotti', 'G Licio Gelli', "Marcello Dell'Utri"]
+--------------------------------------------------------------------------------
+CYPHER GENERATO DALL'AGENTE:
+MATCH (p:Person)-[:IS_SUSPECTED_IN|COMMITTED|INVOLVED_IN|IS_VICTIM_OF]-(c:Case) WHERE p.role IS NOT NULL OR p.profession IS NOT NULL RETURN p.name AS person, p.role AS role, p.profession AS profession, c.name AS caseName
+
+RISPOSTA AGENTE:
+Dall'analisi del database sono state estratte numerose persone registrate per le quali è esplicitamente indicato un ruolo (come vittima, sospettato, testimone, killer, ecc.) o una professione, insieme al relativo caso associato. Tra i principali risultati troviamo ad esempio Francesca Alinovi (ruolo: Victim, professione: critica d'arte) associata al "Caso Alinovi", Farouk Chourbagi (ruolo: Victim, professione: proprietario della ditta) associato al "Caso Bebawi", Giacomo Matteotti (ruolo: Victim, professione: Parlamentare) associato al "Rapimento di Giacomo Matteotti", e moltissimi altri soggetti coinvolti in vari crimini e vicende giudiziarie italiane.
+
+```cypher
+MATCH (p:Person)-[:IS_SUSPECTED_IN|COMMITTED|INVOLVED_IN|IS_VICTIM_OF]-(c:Case) WHERE p.role IS NOT NULL OR p.profession IS NOT NULL RETURN p.name AS person, p.role AS role, p.profession AS profession, c.name AS caseName
+```
+--------------------------------------------------------------------------------
+ESITO: SUCCESSO - trovati 235 (Tempo: 4.6s)
+================================================================================
+
+[MEDIUM_04] Livello: Medio
+DOMANDA NATURALE: Trova modelli o tipologie di armi che compaiono come arma utilizzata in più di un caso di cronaca distinto?
+--------------------------------------------------------------------------------
+CYPHER GOLDEN (Ottimale):
+MATCH (w:Weapon)-[:USED_IN]-(c:Case) WITH w, count(DISTINCT c) AS num_casi, collect(c.name) AS casi WHERE num_casi > 1 RETURN w.name AS arma, num_casi, casi
+
+RISULTATO ATTESO: ['coltello', 'pistola di Santangelo', 'arma da fuoco', 'kalashnikov']
+--------------------------------------------------------------------------------
+CYPHER GENERATO DALL'AGENTE:
+MATCH (w:Weapon)-[:USED_IN]-(c:Case) WITH w, count(DISTINCT c) AS case_count, collect(c.name) AS cases WHERE case_count > 1 RETURN w.name AS weapon, case_count, cases ORDER BY case_count DESC
+
+RISPOSTA AGENTE:
+Analizzando il database, l'arma che compare in più di un caso di cronaca distinto è la **Beretta M1934**, la quale risulta essere utilizzata in 2 casi differenti: il "Delitto di Gorzano" e l'"Omicidio di Via Caravaggio".
+
+```cypher
+MATCH (w:Weapon)-[:USED_IN]-(c:Case) WITH w, count(DISTINCT c) AS case_count, collect(c.name) AS cases WHERE case_count > 1 RETURN w.name AS weapon, case_count, cases ORDER BY case_count DESC
+```
+--------------------------------------------------------------------------------
+ESITO: SUCCESSO/FALLITO - risposta errata allucinata ma query ok (Tempo: 2.47s)
+================================================================================
+
+[HARD_01] Livello: Difficile
+DOMANDA NATURALE: Quali sono le 3 località o città che concentrano il maggior numero di casi di cronaca registrati nel grafo?
+--------------------------------------------------------------------------------
+CYPHER GOLDEN (Ottimale):
+MATCH (c:Case)-[:OCCURRED_AT]-(l:Location) RETURN l.name AS luogo, count(DISTINCT c) AS num_casi ORDER BY num_casi DESC LIMIT 3
+
+RISULTATO ATTESO: ['Milano', 'Roma', 'Torino']
+--------------------------------------------------------------------------------
+CYPHER GENERATO DALL'AGENTE:
+MATCH (c:Case)-[:OCCURRED_AT]-(l:Location) RETURN l.name AS location, count(c) AS case_count ORDER BY case_count DESC LIMIT 3
+
+RISPOSTA AGENTE:
+Le 3 località o città che concentrano il maggior numero di casi di cronaca registrati nel grafo sono:
+1. **Roma**, con 9 casi.
+2. **Milano**, con 4 casi.
+3. **Torino**, con 2 casi.
+
+```cypher
+MATCH (c:Case)-[:OCCURRED_AT]-(l:Location) RETURN l.name AS location, count(c) AS case_count ORDER BY case_count DESC LIMIT 3
+```
+--------------------------------------------------------------------------------
+ESITO: SUPERATO (Tempo: 2.0s)
+================================================================================
+
+[HARD_02] Livello: Difficile
+DOMANDA NATURALE: Quali e quanti sono i casi di cronaca presenti nel grafo che vedono vittime di sesso femminile avvenuti dal 2000 in poi (considerando sia la data del caso che la data di decesso della vittima)?
+--------------------------------------------------------------------------------
+CYPHER GOLDEN (Ottimale):
+MATCH (p:Person)-[:IS_VICTIM_OF]-(c:Case) WHERE (toLower(p.gender) CONTAINS 'female' OR toLower(p.gender) CONTAINS 'femm' OR toLower(p.gender) IN ['f', 'donna']) AND (p.date_of_death >= '2000' OR c.data_evento >= '2000' OR c.date >= '2000') RETURN count(DISTINCT c) AS num_casi, collect(DISTINCT c.name) AS elenco_casi
+
+RISULTATO ATTESO: ['Delitto di Garlasco', 'Omicidio di Antonietta Longo', 'Omicidio di Carol Maltesi', 'Omicidio di Elisa Pomarelli', 'Omicidio di Graziella Mansi', 'Omicidio di Pamela Mastropietro', 'Omicidio di Sara Di Pietrantonio']
+--------------------------------------------------------------------------------
+CYPHER GENERATO DALL'AGENTE:
+MATCH (p:Person)-[:IS_VICTIM_OF]-(c:Case) 
+WHERE toLower(p.gender) = 'female' 
+  AND (c.date >= '2000-01-01' OR c.data >= '2000-01-01' OR c.data_evento >= '2000-01-01' OR p.date_of_death STARTS WITH '20') 
+RETURN c.name, p.name, p.date_of_death, c.date, c.data, c.data_evento
+
+RISPOSTA AGENTE:
+Nel grafo sono presenti 4 casi di cronaca che vedono vittime di sesso femminile e sono avvenuti dal 2000 in poi (considerando la data del caso o la data di decesso della vittima). 
+
+I casi identificati sono:
+1. **Omicidio di Carol Maltesi** (Vittima: Carol Maltesi, data decesso: 2022)
+2. **Omicidio di Graziella Mansi** (Vittima: Graziella Mansi, data decesso: 2000-08-19)
+3. **Omicidio di Pamela Mastropietro** (Vittima: Pamela Mastropietro, data del caso: 2018-01-30)
+4. **Omicidio di Sara Di Pietrantonio** (Vittima: Sara Di Pietrantonio, data decesso: 2016-05-29)
+
+```cypher
+MATCH (p:Person)-[:IS_VICTIM_OF]-(c:Case) 
+WHERE toLower(p.gender) = 'female' 
+  AND (c.date >= '2000-01-01' OR c.data >= '2000-01-01' OR c.data_evento >= '2000-01-01' OR p.date_of_death STARTS WITH '20') 
+RETURN c.name, p.name, p.date_of_death, c.date, c.data, c.data_evento
+```
+--------------------------------------------------------------------------------
+ESITO: SUPERATO - trovati 5 (Tempo: 5.43s)
+================================================================================
+
+[HARD_03] Livello: Difficile
+DOMANDA NATURALE: Estrai l'età di tutte le vittime di cui si conosce l'età al momento del delitto, ordinandole in modo decrescente (dal più anziano al più giovane).
+--------------------------------------------------------------------------------
+CYPHER GOLDEN (Ottimale):
+MATCH (p:Person)-[:IS_VICTIM_OF]-(c:Case) WHERE p.age IS NOT NULL RETURN p.name AS vittima, p.age AS eta, c.name AS caso ORDER BY toInteger(p.age) DESC
+
+RISULTATO ATTESO: ['Germana Stefanini', 'Chiara Poggi', 'Carlo Ala']
+--------------------------------------------------------------------------------
+CYPHER GENERATO DALL'AGENTE:
+MATCH (p:Person)-[:IS_VICTIM_OF]-(c:Case) WHERE p.age IS NOT NULL RETURN p.name AS name, p.age AS age ORDER BY p.age DESC
+
+RISPOSTA AGENTE:
+Ecco l'elenco di tutte le vittime di cui si conosce l'età al momento del delitto, ordinate in modo decrescente (dal più anziano al più giovane):
+
+1. Alvise Nicolis di Robilant - 71 anni
+2. Gianfranco Cuccuini - 65 anni
+3. Carlo Ala - 58 anni
+4. Germana Stefanini - 56 anni
+5. Antonio Maso - 55 anni
+6. Domenico Santangelo - 54 anni
+7. Duilio Saggia Civitelli - 53 anni
+8. Gemma Cenname - 50 anni
+9. Maria Rosa Tessari - 48 anni
+10. Antonella Di Veroli - 47 anni
+11. Maurizio Gucci - 46 anni
+12. Paolo Seganti - 38 anni
+13. Francesco Evangelista - 37 anni
+14. Gabriella Bisi - 35 anni
+15. Ciriaco Carru - 32 anni
+16. Alessandro Floris - 31 anni
+17. Maria Letizia Berdini - 31 anni
+18. Antonietta Longo - 30 anni
+19. Monica Calò - 29 anni
+20. Elisa Pomarelli - 28 anni
+21. Farouk Chourbagi - 27 anni
+22. Chiara Poggi - 26 anni
+23. Carol Maltesi - 26 anni
+24. Gabriele Sandri - 26 anni
+25. Giorgio Agatino Giammona - 25 anni
+26. Pietro Nieri - 25 anni
+27. Ivo Zini - 24 anni
+28. Christa Wanninger - 23 anni
+29. Marco Pizzari - 23 anni
+30. Saverio Saltarelli - 23 anni
+31. Miki Mantakas - 22 anni
+32. Sara Di Pietrantonio - 22 anni
+33. Marco Vannini - 20 anni
+34. Paolo Rossi - 19 anni
+35. Carmine Apuzzo - 19 anni
+36. Angela Santangelo - 19 anni
+37. Ottavio Barsottelli - 18 anni
+38. Pamela Mastropietro - 18 anni
+39. Saman Abbas - 18 anni
+40. Alessandro Caravillani - 16 anni
+41. Maria Teresa Novara - 13 anni
+42. Ermanno Lavorini - 12 anni
+43. Lorys Andrea Stival - 8 anni
+44. Samuele Lorenzi - 3 anni
+
+```cypher
+MATCH (p:Person)-[:IS_VICTIM_OF]-(c:Case) WHERE p.age IS NOT NULL RETURN p.name AS name, p.age AS age ORDER BY p.age DESC
+```
+--------------------------------------------------------------------------------
+ESITO: SUPERATO - trovati 44 (Tempo: 2.68s)
+================================================================================
+

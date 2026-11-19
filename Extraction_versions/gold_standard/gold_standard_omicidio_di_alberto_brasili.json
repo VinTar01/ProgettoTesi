@@ -1,0 +1,761 @@
+
+{
+  "entities": [
+    {
+      "id": "case_omicidio_alberto_brasili",
+      "label": "Case",
+      "name": "Omicidio di Alberto Brasili",
+      "role": null,
+      "gender": null,
+      "age": null,
+      "profession": null,
+      "date_of_birth": null,
+      "date_of_death": null,
+      "is_deceased": null
+    },
+    {
+      "id": "person_alberto_brasili",
+      "label": "Person",
+      "name": "Alberto Brasili",
+      "role": "Victim",
+      "gender": "Male",
+      "age": null,
+      "profession": "Studente; commesso presso un negozio di antifurto elettrici",
+      "date_of_birth": null,
+      "date_of_death": "1975-05-25",
+      "is_deceased": true
+    },
+    {
+      "id": "person_lucia_corna",
+      "label": "Person",
+      "name": "Lucia Corna",
+      "role": "Victim; Witness",
+      "gender": "Female",
+      "age": null,
+      "profession": null,
+      "date_of_birth": null,
+      "date_of_death": null,
+      "is_deceased": false
+    },
+    {
+      "id": "person_antonio_bega",
+      "label": "Person",
+      "name": "Antonio Bega",
+      "role": "Suspect; Alleged attacker",
+      "gender": "Male",
+      "age": null,
+      "profession": null,
+      "date_of_birth": null,
+      "date_of_death": null,
+      "is_deceased": null
+    },
+    {
+      "id": "person_pietro_croce",
+      "label": "Person",
+      "name": "Pietro Croce",
+      "role": "Suspect; Alleged attacker",
+      "gender": "Male",
+      "age": null,
+      "profession": null,
+      "date_of_birth": null,
+      "date_of_death": null,
+      "is_deceased": null
+    },
+    {
+      "id": "person_giorgio_nicolosi",
+      "label": "Person",
+      "name": "Giorgio Nicolosi",
+      "role": "Suspect; Alleged attacker",
+      "gender": "Male",
+      "age": null,
+      "profession": null,
+      "date_of_birth": null,
+      "date_of_death": null,
+      "is_deceased": null
+    },
+    {
+      "id": "person_enrico_caruso",
+      "label": "Person",
+      "name": "Enrico Caruso",
+      "role": "Suspect; Alleged attacker",
+      "gender": "Male",
+      "age": null,
+      "profession": null,
+      "date_of_birth": null,
+      "date_of_death": null,
+      "is_deceased": null
+    },
+    {
+      "id": "person_giovanni_sciavicco",
+      "label": "Person",
+      "name": "Giovanni Sciavicco",
+      "role": "Suspect; Alleged attacker",
+      "gender": "Male",
+      "age": null,
+      "profession": null,
+      "date_of_birth": null,
+      "date_of_death": null,
+      "is_deceased": null
+    },
+    {
+      "id": "person_lucia_father",
+      "label": "Person",
+      "name": "Padre di Alberto Brasili",
+      "role": "Relative",
+      "gender": "Male",
+      "age": null,
+      "profession": null,
+      "date_of_birth": null,
+      "date_of_death": null,
+      "is_deceased": null
+    },
+    {
+      "id": "location_milano",
+      "label": "Location",
+      "name": "Milano",
+      "role": null,
+      "gender": null,
+      "age": null,
+      "profession": null,
+      "date_of_birth": null,
+      "date_of_death": null,
+      "is_deceased": null
+    },
+    {
+      "id": "location_piazza_san_babila",
+      "label": "Location",
+      "name": "Piazza San Babila",
+      "role": null,
+      "gender": null,
+      "age": null,
+      "profession": null,
+      "date_of_birth": null,
+      "date_of_death": null,
+      "is_deceased": null
+    },
+    {
+      "id": "location_via_mascagni",
+      "label": "Location",
+      "name": "Via Mascagni, angolo con piazza San Babila",
+      "role": null,
+      "gender": null,
+      "age": null,
+      "profession": null,
+      "date_of_birth": null,
+      "date_of_death": null,
+      "is_deceased": null
+    },
+    {
+      "id": "location_corso_vittorio_emanuele",
+      "label": "Location",
+      "name": "Corso Vittorio Emanuele",
+      "role": null,
+      "gender": null,
+      "age": null,
+      "profession": null,
+      "date_of_birth": null,
+      "date_of_death": null,
+      "is_deceased": null
+    },
+    {
+      "id": "location_bar_corso_vittorio_emanuele",
+      "label": "Location",
+      "name": "Bar in corso Vittorio Emanuele",
+      "role": null,
+      "gender": null,
+      "age": null,
+      "profession": null,
+      "date_of_birth": null,
+      "date_of_death": null,
+      "is_deceased": null
+    },
+    {
+      "id": "location_anpi_provincial_office",
+      "label": "Location",
+      "name": "Sede provinciale dell'Associazione Nazionale Partigiani d'Italia",
+      "role": null,
+      "gender": null,
+      "age": null,
+      "profession": null,
+      "date_of_birth": null,
+      "date_of_death": null,
+      "is_deceased": null
+    },
+    {
+      "id": "location_fatebenefratelli_hospital",
+      "label": "Location",
+      "name": "Ospedale Fatebenefratelli",
+      "role": null,
+      "gender": null,
+      "age": null,
+      "profession": null,
+      "date_of_birth": null,
+      "date_of_death": null,
+      "is_deceased": null
+    },
+    {
+      "id": "location_piazza_de_angeli",
+      "label": "Location",
+      "name": "Piazza De Angeli",
+      "role": null,
+      "gender": null,
+      "age": null,
+      "profession": null,
+      "date_of_birth": null,
+      "date_of_death": null,
+      "is_deceased": null
+    },
+    {
+      "id": "location_settembrini_institute",
+      "label": "Location",
+      "name": "Istituto professionale Settembrini",
+      "role": null,
+      "gender": null,
+      "age": null,
+      "profession": null,
+      "date_of_birth": null,
+      "date_of_death": null,
+      "is_deceased": null
+    },
+    {
+      "id": "location_msi_nearby_headquarters",
+      "label": "Location",
+      "name": "Sede del Movimento Sociale Italiano nelle vicinanze di piazza San Babila",
+      "role": null,
+      "gender": null,
+      "age": null,
+      "profession": null,
+      "date_of_birth": null,
+      "date_of_death": null,
+      "is_deceased": null
+    },
+    {
+      "id": "location_italy",
+      "label": "Location",
+      "name": "Italia",
+      "role": null,
+      "gender": null,
+      "age": null,
+      "profession": null,
+      "date_of_birth": null,
+      "date_of_death": null,
+      "is_deceased": null
+    },
+    {
+      "id": "weapon_knives",
+      "label": "Weapon",
+      "name": "Coltelli utilizzati nell'aggressione",
+      "role": null,
+      "gender": null,
+      "age": null,
+      "profession": null,
+      "date_of_birth": null,
+      "date_of_death": null,
+      "is_deceased": null
+    },
+    {
+      "id": "evidence_msi_electoral_sticker",
+      "label": "Evidence",
+      "name": "Adesivo elettorale del Movimento Sociale Italiano staccato da Alberto Brasili",
+      "role": null,
+      "gender": null,
+      "age": null,
+      "profession": null,
+      "date_of_birth": null,
+      "date_of_death": null,
+      "is_deceased": null
+    },
+    {
+      "id": "evidence_fatal_chest_wound",
+      "label": "Evidence",
+      "name": "Ferita da arma da taglio che raggiunse il cuore di Alberto Brasili",
+      "role": null,
+      "gender": null,
+      "age": null,
+      "profession": null,
+      "date_of_birth": null,
+      "date_of_death": null,
+      "is_deceased": null
+    },
+    {
+      "id": "evidence_other_brasili_stab_wounds",
+      "label": "Evidence",
+      "name": "Altri quattro fendenti subiti da Alberto Brasili",
+      "role": null,
+      "gender": null,
+      "age": null,
+      "profession": null,
+      "date_of_birth": null,
+      "date_of_death": null,
+      "is_deceased": null
+    },
+    {
+      "id": "evidence_lucia_chest_wounds",
+      "label": "Evidence",
+      "name": "Due ferite all'emitorace sinistro di Lucia Corna",
+      "role": null,
+      "gender": null,
+      "age": null,
+      "profession": null,
+      "date_of_birth": null,
+      "date_of_death": null,
+      "is_deceased": null
+    },
+    {
+      "id": "motive_political_identification",
+      "label": "Motive",
+      "name": "Aggressione motivata dalla convinzione che Alberto Brasili fosse comunista e dalla sua rimozione dell'adesivo elettorale del MSI",
+      "role": null,
+      "gender": null,
+      "age": null,
+      "profession": null,
+      "date_of_birth": null,
+      "date_of_death": null,
+      "is_deceased": null
+    },
+    {
+      "id": "statement_lucia_attack_account",
+      "label": "Statement",
+      "name": "Dichiarazione di Lucia Corna sull'agguato e sull'accoltellamento",
+      "role": null,
+      "gender": null,
+      "age": null,
+      "profession": null,
+      "date_of_birth": null,
+      "date_of_death": null,
+      "is_deceased": null
+    },
+    {
+      "id": "statement_initial_left_wing_suspicions",
+      "label": "Statement",
+      "name": "Voce iniziale secondo cui l'agguato sarebbe stato commesso da militanti di sinistra che avevano scambiato Brasili per un avversario politico",
+      "role": null,
+      "gender": null,
+      "age": null,
+      "profession": null,
+      "date_of_birth": null,
+      "date_of_death": null,
+      "is_deceased": null
+    },
+    {
+      "id": "statement_newspapers_drug_users",
+      "label": "Statement",
+      "name": "Interpretazione iniziale di alcuni giornali che descrissero genericamente gli autori come drogati",
+      "role": null,
+      "gender": null,
+      "age": null,
+      "profession": null,
+      "date_of_birth": null,
+      "date_of_death": null,
+      "is_deceased": null
+    },
+    {
+      "id": "statement_il_manifesto_conspiracy",
+      "label": "Statement",
+      "name": "Interpretazione de il manifesto dell'omicidio come gesto riconducibile a un complotto fascista in prossimità dell'anniversario della strage di piazza della Loggia",
+      "role": null,
+      "gender": null,
+      "age": null,
+      "profession": null,
+      "date_of_birth": null,
+      "date_of_death": null,
+      "is_deceased": null
+    },
+    {
+      "id": "statement_brasili_political_profile",
+      "label": "Statement",
+      "name": "Brasili simpatizzava per la sinistra, ma non apparteneva a movimenti organizzati e non aveva un impegno politico organico",
+      "role": null,
+      "gender": null,
+      "age": null,
+      "profession": null,
+      "date_of_birth": null,
+      "date_of_death": null,
+      "is_deceased": null
+    },
+    {
+      "id": "statement_brasili_education_and_work",
+      "label": "Statement",
+      "name": "Brasili alternava lavoro e studio fin dall'età di quattordici anni per contribuire al sostentamento familiare",
+      "role": null,
+      "gender": null,
+      "age": null,
+      "profession": null,
+      "date_of_birth": null,
+      "date_of_death": null,
+      "is_deceased": null
+    },
+    {
+      "id": "case_years_of_lead",
+      "label": "Case",
+      "name": "Contesto storico degli anni di piombo",
+      "role": null,
+      "gender": null,
+      "age": null,
+      "profession": null,
+      "date_of_birth": null,
+      "date_of_death": null,
+      "is_deceased": null
+    },
+    {
+      "id": "case_claudio_varalli_murder",
+      "label": "Case",
+      "name": "Omicidio di Claudio Varalli",
+      "role": null,
+      "gender": null,
+      "age": null,
+      "profession": null,
+      "date_of_birth": null,
+      "date_of_death": null,
+      "is_deceased": null
+    },
+    {
+      "id": "case_giannino_zibecchi_murder",
+      "label": "Case",
+      "name": "Omicidio di Giannino Zibecchi",
+      "role": null,
+      "gender": null,
+      "age": null,
+      "profession": null,
+      "date_of_birth": null,
+      "date_of_death": null,
+      "is_deceased": null
+    },
+    {
+      "id": "case_sergio_ramelli_murder",
+      "label": "Case",
+      "name": "Omicidio di Sergio Ramelli",
+      "role": null,
+      "gender": null,
+      "age": null,
+      "profession": null,
+      "date_of_birth": null,
+      "date_of_death": null,
+      "is_deceased": null
+    },
+    {
+      "id": "case_piazza_della_loggia_massacre",
+      "label": "Case",
+      "name": "Strage di piazza della Loggia",
+      "role": null,
+      "gender": null,
+      "age": null,
+      "profession": null,
+      "date_of_birth": null,
+      "date_of_death": null,
+      "is_deceased": null
+    },
+    {
+      "id": "person_unspecified_attackers",
+      "label": "Person",
+      "name": "Gruppo dei cinque giovani estremisti di destra",
+      "role": "Collective of suspects; Alleged attackers",
+      "gender": null,
+      "age": null,
+      "profession": null,
+      "date_of_birth": null,
+      "date_of_death": null,
+      "is_deceased": null
+    },
+    {
+      "id": "person_unspecified_newspaper_reporters",
+      "label": "Person",
+      "name": "Giornalisti non identificati che riportarono le prime ricostruzioni",
+      "role": "Journalists; Reporters",
+      "gender": null,
+      "age": null,
+      "profession": "Giornalisti",
+      "date_of_birth": null,
+      "date_of_death": null,
+      "is_deceased": null
+    }
+  ],
+  "relationships": [
+    {
+      "source_id": "person_alberto_brasili",
+      "target_id": "case_omicidio_alberto_brasili",
+      "type": "IS_VICTIM_OF"
+    },
+    {
+      "source_id": "person_lucia_corna",
+      "target_id": "case_omicidio_alberto_brasili",
+      "type": "INVOLVED_IN"
+    },
+    {
+      "source_id": "person_lucia_corna",
+      "target_id": "case_omicidio_alberto_brasili",
+      "type": "IS_VICTIM_OF"
+    },
+    {
+      "source_id": "person_antonio_bega",
+      "target_id": "case_omicidio_alberto_brasili",
+      "type": "IS_SUSPECTED_IN"
+    },
+    {
+      "source_id": "person_pietro_croce",
+      "target_id": "case_omicidio_alberto_brasili",
+      "type": "IS_SUSPECTED_IN"
+    },
+    {
+      "source_id": "person_giorgio_nicolosi",
+      "target_id": "case_omicidio_alberto_brasili",
+      "type": "IS_SUSPECTED_IN"
+    },
+    {
+      "source_id": "person_enrico_caruso",
+      "target_id": "case_omicidio_alberto_brasili",
+      "type": "IS_SUSPECTED_IN"
+    },
+    {
+      "source_id": "person_giovanni_sciavicco",
+      "target_id": "case_omicidio_alberto_brasili",
+      "type": "IS_SUSPECTED_IN"
+    },
+    {
+      "source_id": "person_unspecified_attackers",
+      "target_id": "case_omicidio_alberto_brasili",
+      "type": "IS_SUSPECTED_IN"
+    },
+    {
+      "source_id": "case_omicidio_alberto_brasili",
+      "target_id": "location_milano",
+      "type": "OCCURRED_AT"
+    },
+    {
+      "source_id": "location_piazza_san_babila",
+      "target_id": "location_milano",
+      "type": "WITHIN"
+    },
+    {
+      "source_id": "location_via_mascagni",
+      "target_id": "location_milano",
+      "type": "WITHIN"
+    },
+    {
+      "source_id": "location_corso_vittorio_emanuele",
+      "target_id": "location_milano",
+      "type": "WITHIN"
+    },
+    {
+      "source_id": "location_bar_corso_vittorio_emanuele",
+      "target_id": "location_corso_vittorio_emanuele",
+      "type": "WITHIN"
+    },
+    {
+      "source_id": "location_anpi_provincial_office",
+      "target_id": "location_milano",
+      "type": "WITHIN"
+    },
+    {
+      "source_id": "location_fatebenefratelli_hospital",
+      "target_id": "location_milano",
+      "type": "WITHIN"
+    },
+    {
+      "source_id": "location_piazza_de_angeli",
+      "target_id": "location_milano",
+      "type": "WITHIN"
+    },
+    {
+      "source_id": "location_settembrini_institute",
+      "target_id": "location_milano",
+      "type": "WITHIN"
+    },
+    {
+      "source_id": "location_msi_nearby_headquarters",
+      "target_id": "location_piazza_san_babila",
+      "type": "WITHIN"
+    },
+    {
+      "source_id": "location_milano",
+      "target_id": "location_italy",
+      "type": "WITHIN"
+    },
+    {
+      "source_id": "weapon_knives",
+      "target_id": "case_omicidio_alberto_brasili",
+      "type": "USED_IN"
+    },
+    {
+      "source_id": "weapon_knives",
+      "target_id": "location_via_mascagni",
+      "type": "FOUND_AT"
+    },
+    {
+      "source_id": "evidence_msi_electoral_sticker",
+      "target_id": "location_via_mascagni",
+      "type": "FOUND_AT"
+    },
+    {
+      "source_id": "person_alberto_brasili",
+      "target_id": "evidence_msi_electoral_sticker",
+      "type": "LEFT_EVIDENCE"
+    },
+    {
+      "source_id": "evidence_fatal_chest_wound",
+      "target_id": "location_anpi_provincial_office",
+      "type": "FOUND_AT"
+    },
+    {
+      "source_id": "evidence_other_brasili_stab_wounds",
+      "target_id": "location_anpi_provincial_office",
+      "type": "FOUND_AT"
+    },
+    {
+      "source_id": "evidence_lucia_chest_wounds",
+      "target_id": "location_anpi_provincial_office",
+      "type": "FOUND_AT"
+    },
+    {
+      "source_id": "person_unspecified_attackers",
+      "target_id": "weapon_knives",
+      "type": "OWNS_WEAPON"
+    },
+    {
+      "source_id": "case_omicidio_alberto_brasili",
+      "target_id": "motive_political_identification",
+      "type": "HAS_MOTIVE"
+    },
+    {
+      "source_id": "person_lucia_corna",
+      "target_id": "statement_lucia_attack_account",
+      "type": "MADE_STATEMENT"
+    },
+    {
+      "source_id": "statement_lucia_attack_account",
+      "target_id": "case_omicidio_alberto_brasili",
+      "type": "RELATES_TO"
+    },
+    {
+      "source_id": "statement_lucia_attack_account",
+      "target_id": "location_anpi_provincial_office",
+      "type": "RELATES_TO"
+    },
+    {
+      "source_id": "person_unspecified_newspaper_reporters",
+      "target_id": "statement_initial_left_wing_suspicions",
+      "type": "MADE_STATEMENT"
+    },
+    {
+      "source_id": "statement_initial_left_wing_suspicions",
+      "target_id": "case_omicidio_alberto_brasili",
+      "type": "RELATES_TO"
+    },
+    {
+      "source_id": "person_unspecified_newspaper_reporters",
+      "target_id": "statement_newspapers_drug_users",
+      "type": "MADE_STATEMENT"
+    },
+    {
+      "source_id": "statement_newspapers_drug_users",
+      "target_id": "case_omicidio_alberto_brasili",
+      "type": "RELATES_TO"
+    },
+    {
+      "source_id": "statement_il_manifesto_conspiracy",
+      "target_id": "case_omicidio_alberto_brasili",
+      "type": "RELATES_TO"
+    },
+    {
+      "source_id": "statement_il_manifesto_conspiracy",
+      "target_id": "case_piazza_della_loggia_massacre",
+      "type": "RELATES_TO"
+    },
+    {
+      "source_id": "person_alberto_brasili",
+      "target_id": "statement_brasili_political_profile",
+      "type": "MADE_STATEMENT"
+    },
+    {
+      "source_id": "statement_brasili_political_profile",
+      "target_id": "case_omicidio_alberto_brasili",
+      "type": "RELATES_TO"
+    },
+    {
+      "source_id": "person_alberto_brasili",
+      "target_id": "statement_brasili_education_and_work",
+      "type": "MADE_STATEMENT"
+    },
+    {
+      "source_id": "statement_brasili_education_and_work",
+      "target_id": "case_omicidio_alberto_brasili",
+      "type": "RELATES_TO"
+    },
+    {
+      "source_id": "person_alberto_brasili",
+      "target_id": "location_fatebenefratelli_hospital",
+      "type": "LOCATED_IN"
+    },
+    {
+      "source_id": "person_alberto_brasili",
+      "target_id": "location_piazza_de_angeli",
+      "type": "LOCATED_IN"
+    },
+    {
+      "source_id": "person_alberto_brasili",
+      "target_id": "location_settembrini_institute",
+      "type": "LOCATED_IN"
+    },
+    {
+      "source_id": "person_lucia_corna",
+      "target_id": "location_anpi_provincial_office",
+      "type": "LOCATED_IN"
+    },
+    {
+      "source_id": "person_antonio_bega",
+      "target_id": "location_bar_corso_vittorio_emanuele",
+      "type": "LOCATED_IN"
+    },
+    {
+      "source_id": "person_pietro_croce",
+      "target_id": "location_bar_corso_vittorio_emanuele",
+      "type": "LOCATED_IN"
+    },
+    {
+      "source_id": "person_giorgio_nicolosi",
+      "target_id": "location_bar_corso_vittorio_emanuele",
+      "type": "LOCATED_IN"
+    },
+    {
+      "source_id": "person_enrico_caruso",
+      "target_id": "location_bar_corso_vittorio_emanuele",
+      "type": "LOCATED_IN"
+    },
+    {
+      "source_id": "person_giovanni_sciavicco",
+      "target_id": "location_bar_corso_vittorio_emanuele",
+      "type": "LOCATED_IN"
+    },
+    {
+      "source_id": "case_omicidio_alberto_brasili",
+      "target_id": "case_years_of_lead",
+      "type": "RELATES_TO"
+    },
+    {
+      "source_id": "case_omicidio_alberto_brasili",
+      "target_id": "case_claudio_varalli_murder",
+      "type": "RELATES_TO"
+    },
+    {
+      "source_id": "case_omicidio_alberto_brasili",
+      "target_id": "case_giannino_zibecchi_murder",
+      "type": "RELATES_TO"
+    },
+    {
+      "source_id": "case_omicidio_alberto_brasili",
+      "target_id": "case_sergio_ramelli_murder",
+      "type": "RELATES_TO"
+    },
+    {
+      "source_id": "case_omicidio_alberto_brasili",
+      "target_id": "motive_political_identification",
+      "type": "RELATES_TO"
+    },
+    {
+      "source_id": "person_lucia_father",
+      "target_id": "person_alberto_brasili",
+      "type": "INVOLVED_IN"
+    }
+  ]
+}
+

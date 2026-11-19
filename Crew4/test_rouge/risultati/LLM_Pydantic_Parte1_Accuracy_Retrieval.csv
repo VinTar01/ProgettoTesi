@@ -1,0 +1,12 @@
+ID,Livello,Risultati_Attesi,Risultati_Ottenuti_Da_Query,Accuracy_Recupero,Risultati_Risposta_LLM,NLG_Completeness
+EASY_01,Facile,2,2,1.0,2,1.0
+EASY_02,Facile,1,1,1.0,1,1.0
+EASY_03,Facile,1,1,1.0,1,1.0
+EASY_04,Facile,1,0,0.0,1,0.0
+MEDIUM_01,Medio,11,10,0.9091,10,1.0
+MEDIUM_02,Medio,6,6,1.0,6,1.0
+MEDIUM_03,Medio,232,235,1.0,3,0.0128
+MEDIUM_04,Medio,4,0,0.0,0,0.0
+HARD_01,Difficile,3,3,1.0,3,1.0
+HARD_02,Difficile,7,5,0.7143,4,0.8
+HARD_03,Difficile,44,44,1.0,44,1.0

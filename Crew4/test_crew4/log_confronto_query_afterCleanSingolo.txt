@@ -1,0 +1,22 @@
+--- RE-RUN SINGOLO: HARD_04 ---
+[HARD_04] Livello: Difficile
+DOMANDA NATURALE: Quali elementi di prova sono stati rinvenuti nelle coordinate geografiche Point(9.222777777 45.83611111), in quale luogo e comune/provincia si trovano e a quale caso appartengono?
+--------------------------------------------------------------------------------
+CYPHER GOLDEN (Ottimale):
+MATCH (e:Evidence)-[:FOUND_AT]-(l1:Location) WHERE toString(l1.coordinates) CONTAINS '9.222777777' OPTIONAL MATCH (l1)-[:WITHIN]-(l2:Location) OPTIONAL MATCH (e)<-[:LEFT_EVIDENCE]-(:Person)-[]-(c:Case) RETURN e.name AS reperto, l1.name AS luogo, l2.name AS comune_provincia, coalesce(c.name, 'N/D') AS caso
+
+RISULTATO ATTESO: ['Ponte Lambro', 'Milano', 'biberon pieno di latte', 'biberon di tè freddo', 'boccetta di benzodiazepine', 'Morte di Diana Pifferi']
+--------------------------------------------------------------------------------
+CYPHER GENERATO DALL'AGENTE:
+MATCH (l:Location) WHERE l.coordinates CONTAINS '9.222777777' OR l.coordinates CONTAINS '45.83611111' MATCH (e:Evidence)-[:FOUND_AT]-(l) OPTIONAL MATCH (c:Case)-[:OCCURRED_AT]-(l) RETURN e.name AS evidence, l.name AS location, l.administrative_entity AS admin_entity, c.name AS case_name
+
+RISPOSTA AGENTE:
+Alle coordinate geografiche specificate (corrispondenti alla località di Albiolo, in provincia di Como) è stato rinvenuto il seguente elemento di prova: un bossolo calibro 7.65 Browning. Questo luogo si trova ad Albiolo, nella provincia di Como, e appartiene al caso denominato "Omicidio di Angelo Vassallo".
+
+```cypher
+MATCH (l:Location) WHERE l.coordinates CONTAINS '9.222777777' OR l.coordinates CONTAINS '45.83611111' MATCH (e:Evidence)-[:FOUND_AT]-(l) OPTIONAL MATCH (c:Case)-[:OCCURRED_AT]-(l) RETURN e.name AS evidence, l.name AS location, l.administrative_entity AS admin_entity, c.name AS case_name
+```
+--------------------------------------------------------------------------------
+ESITO: FALLITO (Tempo: 20.99s)
+================================================================================
+
